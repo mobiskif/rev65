@@ -2,6 +2,7 @@ package ru.rev65
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
@@ -29,11 +30,20 @@ class MainActivity : AppCompatActivity() {
         model.state.observe(this, { setContent { UI(model) } })
         model.usrList.observe(this, { model.writeUsrList() })
         model.idPat.observe(this, {
-            Log.d("jop", "=== idPat $it ${model.user}")
             val usr = model.user as MutableMap
+            Log.d("jop", "=== idPat $it $usr")
             usr["idPat"] = it["IdPat"].toString()
             model.updateUser(usr)
             model.readSpecList(usr)
+        })
+        model.idTalon.observe(this, {
+            val usr = model.user
+            Log.d("jop", "=== idTalon $it $usr")
+            val spec = usr["NameSpesiality"]
+            val dat = usr["VisitStart"]?.split("T")?.get(0)
+            val tim = usr["VisitStart"]?.split("T")?.get(1)?.substring(0,5)
+            if (it["Success"]=="true") Toast.makeText(this, "Талон успешно отложен: \n$spec \n$dat $tim", Toast.LENGTH_LONG).show()
+            else Toast.makeText(this, "Талон не отложен: $it", Toast.LENGTH_LONG).show()
         })
     }
 
@@ -74,6 +84,7 @@ fun UI(model: MainViewModel) {
     val docs = if (!model.docList.value.isNullOrEmpty()) model.docList.value as List else listOf()
     val dist = if (!model.distrList.value.isNullOrEmpty()) model.distrList.value as List else listOf()
     val talons = if (!model.talonList.value.isNullOrEmpty()) model.talonList.value as List else listOf()
+    val hist = if (!model.histList.value.isNullOrEmpty()) model.histList.value as List else listOf()
     val wait = model.wait.value == true
 
     Scaffold(floatingActionButton = { myFab(model) }) {
@@ -106,6 +117,22 @@ fun UI(model: MainViewModel) {
                 "Выбрать талон" -> {
                     patItems(model)
                     LazyColumnFor(talons) { talonItems(it, model) }
+                }
+                "Отложенные талоны" -> {
+                    patItems(model)
+                    //Log.d("jop","***** $hist")
+                    LazyColumnFor(hist) {
+                        Log.d("jop","***** $it")
+                        //var a = it[0] as Map<String,String>
+                        //var b = it[1] as Map<String,String>
+                        //var c = it[2] as Map<String,String>
+                        //var d = it[3] as Map<String,String>
+                        histItems(it, model)
+                    }
+                }
+                "Взять талон" -> {
+                    patItems(model)
+                    talonItemsEdit(model)
                 }
             }
         }

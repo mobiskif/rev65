@@ -14,6 +14,8 @@ class MainViewModel : ViewModel() {
     private val repository = Repository()
     val wait = repository.wait
     val idPat = repository.idPat
+    val idTalon = repository.idTalon
+    val histList = repository.histList
     val patList = repository.patList
     val lpuList = repository.lpuList
     val specList = repository.specList
@@ -97,6 +99,18 @@ class MainViewModel : ViewModel() {
     fun readTalonList(map: Map<String, String>) {
         viewModelScope.launch {
             repository.readTalonList(map)
+        }
+    }
+
+    fun readHistList(map: Map<String, String>) {
+        viewModelScope.launch {
+            repository.readHistList(map)
+        }
+    }
+
+    fun getTalon(map: Map<String, String>) {
+        viewModelScope.launch {
+            repository.getTalon(map)
         }
     }
 

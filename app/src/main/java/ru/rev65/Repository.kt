@@ -12,8 +12,12 @@ class Repository {
 
     private val _wait = MutableLiveData(false)
     val wait: LiveData<Boolean> = _wait
+    private val _idTalon = MutableLiveData<Map<String, String>>()
+    val idTalon: LiveData<Map<String, String>> = _idTalon
     private val _idPat = MutableLiveData<Map<String, String>>()
     val idPat: LiveData<Map<String, String>> = _idPat
+    private var _histList = MutableLiveData<List<Map<String, String>>>()
+    val histList: LiveData<List<Map<String, String>>> = _histList
     private var _talonList = MutableLiveData<List<Map<String, String>>>()
     val talonList: LiveData<List<Map<String, String>>> = _talonList
     private var _docList = MutableLiveData<List<Map<String, String>>>()
@@ -216,6 +220,31 @@ class Repository {
             val res = Hub2().getTalonList("GetAvaibleAppointments", args)
             Log.d("jop", "-- $res")
             _talonList.postValue(res)
+            _wait.postValue(false)
+        }
+    }
+
+    suspend fun readHistList(map: Map<String, String>) {
+        Log.d("jop", "-- readHistList")
+        withContext(Dispatchers.IO) {
+            _wait.postValue(true)
+            val args = arrayOf(map["IdLpu"].toString(),map["idPat"].toString())
+            val res = Hub2().getHistList("GetPatientHistory", args)
+            Log.d("jop", "=== $res")
+            _histList.postValue(res)
+            _wait.postValue(false)
+        }
+    }
+
+    suspend fun getTalon(map: Map<String, String>){
+        Log.d("jop", "-- getTalon")
+        withContext(Dispatchers.IO) {
+            _wait.postValue(true)
+            val args = arrayOf(map["IdLpu"].toString(),map["IdAppointment"].toString(),map["idPat"].toString())
+            //var res = Hub2().getTalon("SetAppointment", args)
+            val res = mutableListOf<Map<String,String>>(mapOf("Success" to "true"))
+            Log.d("jop", "-- $res")
+            _idTalon.postValue(res[0])
             _wait.postValue(false)
         }
     }

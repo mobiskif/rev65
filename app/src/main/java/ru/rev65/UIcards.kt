@@ -1,5 +1,6 @@
 package ru.rev65
 
+import android.util.Log
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -118,6 +119,7 @@ fun patItems(model: MainViewModel) {
                 if (state=="Выбрать специальность") Text(trimNull(user["idPat"]))
                 if (state=="Выбрать врача") Text(trimNull(user["NameSpesiality"]))
                 if (state=="Выбрать талон") Text(trimNull(user["DocName"]))
+                if (state=="Взять талон") Text(trimNull(user["DocName"]))
                 if (model.getState() != "Выбрать клинику" && wait) CircularProgressIndicator()
             }
         }
@@ -163,14 +165,13 @@ fun distItems(map: Map<String, String>, wait: Boolean) {
 
 @Composable
 fun lpuItems(map: Map<String, String>, model: MainViewModel) {
-    //var pat0 = listOf<Map<String, String>>()
-    //val wait = model.wait.value == true
     val usr = model.user as MutableMap
     val onclck: (lpu: Map<String, String>) -> Unit = {
         usr["IdLpu"] = it["IdLPU"].toString()
         usr["LPUShortName"] = it["LPUShortName"].toString()
         model.user = usr
         model.checkPat(usr)
+        model.readHistList(usr)
         model.setState("Выбрать специальность")
     }
     Row(modifier = mbord.then(mpadd).then(mfw)) {
@@ -179,37 +180,6 @@ fun lpuItems(map: Map<String, String>, model: MainViewModel) {
         }
     }
 
-    /*
-    if (!model.patList.value.isNullOrEmpty())
-        pat0 = model.patList.value?.filter { it.containsValue(map["IdLPU"]) } as List
-
-    Row(modifier = mbord.then(mpadd).then(mfw)) {
-        Column(mf062.clickable(onClick = { onclck(map) })) {
-            Text("${map["LPUFullName"]}")
-        }
-        Column {
-            //Text("${pat}")
-            if (!pat0.isNullOrEmpty()) {
-                val pat = pat0[0]
-                if (pat["Success"].equals("true")) {
-                    Text("Карточка ", fontSize = 12.sp)
-                    Text("${pat["IdPat"]}", fontSize = 12.sp)
-
-                } else {
-                    Text("${pat["IdPat"]}", fontSize = 12.sp)
-                }
-                if ("${pat["IdPat"]}".length < 2 && wait) {
-                    Text("Запрос в регистратуру", fontSize = 12.sp)
-                    CircularProgressIndicator(Modifier.preferredSize(12.dp), strokeWidth = 1.dp)
-                }
-            } else if (wait) {
-                Text("Запрос в регистратуру", fontSize = 12.sp)
-                CircularProgressIndicator(Modifier.preferredSize(12.dp), strokeWidth = 1.dp)
-            }
-
-        }
-    }
-*/
     Spacer(modifier = Modifier.height(8.dp))
 }
 
@@ -223,7 +193,6 @@ fun specItems(map: Map<String, String>, model: MainViewModel) {
         model.setState("Выбрать врача")
         model.readDocList(usr)
     }
-
     if ("${map["Success"]}" == "true") {
         //
     }
@@ -275,10 +244,10 @@ fun docItems(map: Map<String, String>, model: MainViewModel) {
 fun talonItems(map: Map<String, String>, model: MainViewModel) {
     val usr = model.user as MutableMap
     val onclck: (spec: Map<String, String>) -> Unit = {
-        usr["IdDoc"] = it["IdDoc"].toString()
-        usr["DocName"] = it["Name"].toString()
+        usr["IdAppointment"] = it["IdAppointment"].toString()
+        usr["VisitStart"] = map["VisitStart"].toString()
         model.updateUser(usr)
-        model.setState("Выбрать талон")
+        model.setState("Взять талон")
     }
 
     Row(modifier = mbord.then(mpadd).then(mfw)) {
@@ -293,4 +262,62 @@ fun talonItems(map: Map<String, String>, model: MainViewModel) {
         }
     }
     Spacer(modifier = Modifier.height(8.dp))
+}
+
+@Composable
+fun talonItemsEdit(model: MainViewModel) {
+    val usr = model.user as MutableMap
+
+    Row(modifier = mbord.then(mpadd).then(mfw)) {
+        Column(mf062) {
+            Text(trimNull("Талон №: "+usr["IdAppointment"]))
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(modifier = mpadd.then(mfw)) {
+
+                Button(onClick = {
+                    model.getTalon(usr)
+                    model.setState("Выбрать специальность")
+                }) { Text("Взять?") }
+
+                TextButton(onClick = {
+                    model.setState("Выбрать врача")
+                }) { Text("Нет") }
+            }
+        }
+        Column {
+            val dat = usr["VisitStart"]?.split("T")?.get(0)
+            val tim = usr["VisitStart"]?.split("T")?.get(1)?.substring(0,5)
+            Text(trimNull(dat))
+            Text(trimNull(tim))
+        }
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+}
+
+@Composable
+fun histItems(map: Map<String, String>, model: MainViewModel) {
+    val usr = model.user as MutableMap
+    val onclck: (spec: Map<String, String>) -> Unit = {
+        //usr["IdAppointment"] = it["IdAppointment"].toString()
+        //usr["VisitStart"] = map["VisitStart"].toString()
+        //model.updateUser(usr)
+        model.setState("Выбрать специальность")
+    }
+
+    if(!map["IdAppointment"].isNullOrEmpty()) {
+        Row(modifier = mbord.then(mpadd).then(mfw)) {
+            Column(mf062.clickable(onClick = { onclck(map) })) {
+                Text(trimNull("Талон №: " + map["IdAppointment"]))
+                Text(trimNull(map["Name"]))
+                Text(trimNull(map["NameSpesiality"]))
+            }
+            Column {
+                val dat = map["VisitStart"]?.split("T")?.get(0)
+                val tim = map["VisitStart"]?.split("T")?.get(1)?.substring(0, 5)
+                Text(trimNull(dat))
+                Text(trimNull(tim))
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+    }
 }

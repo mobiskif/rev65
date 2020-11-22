@@ -52,10 +52,10 @@ class Hub2 {
                 val obj2 = obj.getProperty(i)
                 val info2 = obj.getPropertyInfo(i)
                 if (info2.value is SoapObject) {
-                    //Log.d("jop", "$t $i ${info2.name}")
+                    Log.d("jop", "$t $i ${info2.name}")
                     processObj(obj2, info2, level+1, list)
                 } else {
-                    //Log.d("jop", "$t $i ${info2.name} ${info2.value}")
+                    Log.d("jop", "$t $i ${info2.name} ${info2.value}")
                     row[info2.name] = "${info2.value}"
                 }
             }
@@ -113,6 +113,21 @@ class Hub2 {
         request.addProperty("idPat", args[2])
         request.addProperty("visitStart", "2020-11-01")
         request.addProperty("visitEnd", "2020-12-31")
+        return getSoap(action, request)
+    }
+
+    fun getHistList(action: String, args: Array<String>): MutableList<Map<String, String>> {
+        val request = SoapObject(_xTEM, action)
+        request.addProperty("idLpu", args[0])
+        request.addProperty("idPat", args[1])
+        return getSoap(action, request)
+    }
+
+    fun getTalon(action: String, args: Array<String>): MutableList<Map<String, String>> {
+        val request = SoapObject(_xTEM, action)
+        request.addProperty("idAppointment", args[1])
+        request.addProperty("idLpu", args[0])
+        request.addProperty("idPat", args[2])
         return getSoap(action, request)
     }
 
