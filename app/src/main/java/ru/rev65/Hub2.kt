@@ -27,8 +27,8 @@ class Hub2 {
         try {
             androidHttpTransport.debug = true
             androidHttpTransport.call(soapACTION, envelope)
-            Log.d("jop", androidHttpTransport.requestDump)
-            Log.d("jop", androidHttpTransport.responseDump)
+            //Log.d("jop", androidHttpTransport.requestDump)
+            //Log.d("jop", androidHttpTransport.responseDump)
             //if (action.equals("CheckPatient")) Log.d("jop", androidHttpTransport.responseDump)
             val soapObj = envelope.response as SoapObject
             processObj(soapObj, PropertyInfo(), 0, list)
@@ -52,10 +52,10 @@ class Hub2 {
                 val obj2 = obj.getProperty(i)
                 val info2 = obj.getPropertyInfo(i)
                 if (info2.value is SoapObject) {
-                    Log.d("jop", "$t $i ${info2.name}")
-                    processObj(obj2, info2, level+1, list)
+                    //Log.d("jop", "$t $i ${info2.name}")
+                    processObj(obj2, info2, level + 1, list)
                 } else {
-                    Log.d("jop", "$t $i ${info2.name} ${info2.value}")
+                    //Log.d("jop", "$t $i ${info2.name} ${info2.value}")
                     row[info2.name] = "${info2.value}"
                 }
             }
@@ -120,7 +120,7 @@ class Hub2 {
         val request = SoapObject(_xTEM, action)
         request.addProperty("idLpu", args[0])
         request.addProperty("idPat", args[1])
-        return getSoap(action, request)
+        return getSoap2(action, request)
     }
 
     fun getTalon(action: String, args: Array<String>): MutableList<Map<String, String>> {
@@ -130,6 +130,48 @@ class Hub2 {
         request.addProperty("idPat", args[2])
         return getSoap(action, request)
     }
+
+    private fun getSoap2(action: String, request: SoapObject): MutableList<Map<String, String>> {
+        val list: MutableList<Map<String, String>> = mutableListOf()
+        request.addProperty("guid", _gUID)
+        val soapACTION = "http://tempuri.org/IHubService/$action"
+        val envelope = SoapSerializationEnvelope(SoapEnvelope.VER10)
+        envelope.bodyOut = request
+        envelope.implicitTypes = true
+        envelope.dotNet = true
+        envelope.setOutputSoapObject(request)
+        val soap = HttpTransportSE(_soapPURL)
+        try {
+            soap.debug = true
+            soap.call(soapACTION, envelope)
+            var resultobj = envelope.bodyIn as SoapObject
+            var rootobj = resultobj.getProperty(0) as SoapObject
+            val ListHistoryVisit = rootobj.getProperty("ListHistoryVisit") as SoapObject
+            for (i in 0 until ListHistoryVisit.propertyCount) {
+                val row: MutableMap<String, String> = mutableMapOf()
+                val obj = ListHistoryVisit.getProperty(i) as SoapObject
+                val DateCreatedAppointment = obj.getPrimitivePropertyAsString("DateCreatedAppointment")
+                val IdAppointment = obj.getPrimitivePropertyAsString("IdAppointment")
+                val VisitStart = obj.getPrimitivePropertyAsString("VisitStart")
+                val doc = obj.getProperty("DoctorRendingConsultation") as SoapObject
+                val Name = doc.getPrimitivePropertyAsString("Name")
+                val sec = obj.getProperty("SpecialityRendingConsultation") as SoapObject
+                val NameSpesiality = sec.getPrimitivePropertyAsString("NameSpesiality")
+
+                row["DateCreatedAppointment"] = DateCreatedAppointment
+                row["IdAppointment"] = IdAppointment
+                row["VisitStart"] = VisitStart
+                row["Name"] =  Name
+                row["NameSpesiality"] = NameSpesiality
+
+                //Log.d("jop", "~~ $DateCreatedAppointment $IdAppointment $VisitStart $Name $NameSpesiality")
+                list.add(row)
+            }
+        }
+        catch (e: Exception) {}
+        return list
+    }
+
 
 }
 

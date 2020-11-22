@@ -102,7 +102,7 @@ class Repository {
     }
 
     suspend fun checkPat(map: Map<String, String>): Map<String, String> {
-        Log.d("jop", "-- checkPat $map")
+        Log.d("jop", "-- checkPat")
         val result = mutableMapOf<String, String>()
         val f = map["F"].toString()
         val i = map["I"].toString()
@@ -114,7 +114,6 @@ class Repository {
             _wait.postValue(true)
             val res = Hub2().checkPat("CheckPatient", args)
             if (res.isNotEmpty()) {
-                Log.d("jop", "$l $res ")
                 if (res[0]["Success"].equals("true")) {
                     result["IdPat"] = res[0]["IdPat"].toString()
                     result["Success"] = "true"
@@ -133,25 +132,26 @@ class Repository {
     }
 
     suspend fun addUserToList(map: Map<String, String>) {
+        Log.d("jop", "-- addUserToList")
         withContext(Dispatchers.IO) {
             _wait.postValue(true)
             _usrList.postValue(usrList.value?.plus(map))
-            Log.d("jop", "-- addUserToList ${usrList.value}")
             _wait.postValue(false)
         }
     }
 
     suspend fun deleteUserFromList(map: Map<String, String>) {
+        Log.d("jop", "-- deleteUserFromList")
         withContext(Dispatchers.IO) {
             _wait.postValue(true)
             val lst = usrList.value?.filterNot { it == map }
             _usrList.postValue(lst)
             _wait.postValue(false)
-            Log.d("jop", "-- deleteUserFromList $lst")
         }
     }
 
     suspend fun updateUserInList(map: Map<String, String>) {
+        Log.d("jop", "-- updateUserInList")
         withContext(Dispatchers.IO) {
             _wait.postValue(true)
             //исключаем из списка старого юсера с id текущего
@@ -159,7 +159,6 @@ class Repository {
             //вместо него добавляем нового текущего и подменяем usrList
             _usrList.postValue(lst?.plus(map))
             _wait.postValue(false)
-            Log.d("jop", "-- updateUserInList")
         }
     }
 
@@ -169,7 +168,6 @@ class Repository {
             _wait.postValue(true)
             //val args =
             val res = Hub2().getDistrList("GetDistrictList")
-            Log.d("jop", "-- $res")
             _distrList.postValue(res)
             _wait.postValue(false)
         }
@@ -182,7 +180,6 @@ class Repository {
             val args = arrayOf(map["iR"].toString())
             val res = Hub2().getLpuList("GetLPUList", args)
             val resf = res.filter { it.containsKey("Description") }
-            Log.d("jop", "-- $res")
             _lpuList.postValue(resf)
             _wait.postValue(false)
         }
@@ -194,7 +191,6 @@ class Repository {
             _wait.postValue(true)
             val args = arrayOf(map["IdLpu"].toString())
             val res = Hub2().getSpecList("GetSpesialityList", args)
-            Log.d("jop", "-- $res")
             _specList.postValue(res)
             _wait.postValue(false)
         }
@@ -206,7 +202,6 @@ class Repository {
             _wait.postValue(true)
             val args = arrayOf(map["IdLpu"].toString(),map["IdSpesiality"].toString(),map["idPat"].toString())
             val res = Hub2().getDocList("GetDoctorList", args)
-            Log.d("jop", "-- $res")
             _docList.postValue(res)
             _wait.postValue(false)
         }
@@ -218,7 +213,6 @@ class Repository {
             _wait.postValue(true)
             val args = arrayOf(map["IdLpu"].toString(),map["IdDoc"].toString(),map["idPat"].toString())
             val res = Hub2().getTalonList("GetAvaibleAppointments", args)
-            Log.d("jop", "-- $res")
             _talonList.postValue(res)
             _wait.postValue(false)
         }
@@ -230,7 +224,6 @@ class Repository {
             _wait.postValue(true)
             val args = arrayOf(map["IdLpu"].toString(),map["idPat"].toString())
             val res = Hub2().getHistList("GetPatientHistory", args)
-            Log.d("jop", "=== $res")
             _histList.postValue(res)
             _wait.postValue(false)
         }
@@ -243,7 +236,6 @@ class Repository {
             val args = arrayOf(map["IdLpu"].toString(),map["IdAppointment"].toString(),map["idPat"].toString())
             //var res = Hub2().getTalon("SetAppointment", args)
             val res = mutableListOf<Map<String,String>>(mapOf("Success" to "true"))
-            Log.d("jop", "-- $res")
             _idTalon.postValue(res[0])
             _wait.postValue(false)
         }

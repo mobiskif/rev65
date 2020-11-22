@@ -29,7 +29,7 @@ val mf062 = Modifier.fillMaxWidth(0.62f)
 
 @Composable
 fun myColumn(
-    col: Modifier = mWhite.then(Modifier.clickable(onClick = { Log.d("jop", "kuku") })),
+    col: Modifier = mWhite.then(Modifier.clickable(onClick = {  })),
     children: @Composable () -> Unit
 ) {
     Spacer(modifier = Modifier.height(8.dp))

@@ -31,14 +31,12 @@ class MainActivity : AppCompatActivity() {
         model.usrList.observe(this, { model.writeUsrList() })
         model.idPat.observe(this, {
             val usr = model.user as MutableMap
-            Log.d("jop", "=== idPat $it $usr")
             usr["idPat"] = it["IdPat"].toString()
             model.updateUser(usr)
             model.readSpecList(usr)
         })
         model.idTalon.observe(this, {
             val usr = model.user
-            Log.d("jop", "=== idTalon $it $usr")
             val spec = usr["NameSpesiality"]
             val dat = usr["VisitStart"]?.split("T")?.get(0)
             val tim = usr["VisitStart"]?.split("T")?.get(1)?.substring(0,5)
@@ -120,13 +118,7 @@ fun UI(model: MainViewModel) {
                 }
                 "Отложенные талоны" -> {
                     patItems(model)
-                    //Log.d("jop","***** $hist")
                     LazyColumnFor(hist) {
-                        Log.d("jop","***** $it")
-                        //var a = it[0] as Map<String,String>
-                        //var b = it[1] as Map<String,String>
-                        //var c = it[2] as Map<String,String>
-                        //var d = it[3] as Map<String,String>
                         histItems(it, model)
                     }
                 }
