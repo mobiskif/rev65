@@ -1,6 +1,5 @@
 package ru.rev65
 
-import android.util.Log
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 private fun trimNull(s: String?): String {
     var result = "$s"
@@ -111,16 +109,15 @@ fun patItems(model: MainViewModel) {
             Column(mf062.clickable(onClick = {onclck(user)})) {
                 Text("${user["F"]} ${user["I"]} ${user["O"]}")
                 Text("${user["D"]} ")
-                //Text(trimNull(user["R"]))
             }
             Column {
                 if (state=="Выбрать клинику") Text(trimNull(user["R"]))
                 if (state=="Выбрать специальность") Text(trimNull(user["LPUShortName"]))
-                if (state=="Выбрать специальность") Text(trimNull(user["idPat"]))
+                if (state=="Выбрать специальность") Text("№: "+trimNull(user["idPat"]))
                 if (state=="Выбрать врача") Text(trimNull(user["NameSpesiality"]))
                 if (state=="Выбрать талон") Text(trimNull(user["DocName"]))
                 if (state=="Взять талон") Text(trimNull(user["DocName"]))
-                if (model.getState() != "Выбрать клинику" && wait) CircularProgressIndicator()
+                //if (model.getState() != "Выбрать клинику" && wait) CircularProgressIndicator()
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -202,7 +199,8 @@ fun specItems(map: Map<String, String>, model: MainViewModel) {
                 Text("${map["NameSpesiality"]}")
             }
             Column {
-                Text("Талонов: ${map["CountFreeParticipantIE"]} \nРезерв: ${map["CountFreeTicket"]}")
+                Text("Талонов: ${map["CountFreeParticipantIE"]}")
+                //Text("Резерв: ${map["CountFreeTicket"]}")
                 //Text("${spec["NearestDate"]}\n${spec["LastDate"]}")
             }
         }
@@ -233,7 +231,7 @@ fun docItems(map: Map<String, String>, model: MainViewModel) {
         }
         Column {
             Text("Талонов: " + trimNull(map["CountFreeParticipantIE"]))
-            Text("Резерв: " + trimNull(map["CountFreeTicket"]))
+            //Text("Резерв: " + trimNull(map["CountFreeTicket"]))
         }
     }
     Spacer(modifier = Modifier.height(8.dp))
@@ -250,18 +248,21 @@ fun talonItems(map: Map<String, String>, model: MainViewModel) {
         model.setState("Взять талон")
     }
 
-    Row(modifier = mbord.then(mpadd).then(mfw)) {
-        Column(mf062.clickable(onClick = { onclck(map) })) {
-            Text(trimNull("Талон №: "+map["IdAppointment"]))
+    if (map["IdAppointment"]=="null") { }
+    else {
+        Row(modifier = mbord.then(mpadd).then(mfw)) {
+            Column(mf062.clickable(onClick = { onclck(map) })) {
+                Text(trimNull("Талон №: " + map["IdAppointment"]))
+            }
+            Column {
+                val dat = map["VisitStart"]?.split("T")?.get(0)
+                val tim = map["VisitStart"]?.split("T")?.get(1)?.substring(0, 5)
+                Text(trimNull(dat))
+                Text(trimNull(tim))
+            }
         }
-        Column {
-            val dat = map["VisitStart"]?.split("T")?.get(0)
-            val tim = map["VisitStart"]?.split("T")?.get(1)?.substring(0,5)
-            Text(trimNull(dat))
-            Text(trimNull(tim))
-        }
+        Spacer(modifier = Modifier.height(8.dp))
     }
-    Spacer(modifier = Modifier.height(8.dp))
 }
 
 @Composable
@@ -298,9 +299,7 @@ fun talonItemsEdit(model: MainViewModel) {
 fun histItems(map: Map<String, String>, model: MainViewModel) {
     val usr = model.user as MutableMap
     val onclck: (spec: Map<String, String>) -> Unit = {
-        //usr["IdAppointment"] = it["IdAppointment"].toString()
-        //usr["VisitStart"] = map["VisitStart"].toString()
-        //model.updateUser(usr)
+        model.deleteTalon(it)
         model.setState("Выбрать специальность")
     }
 

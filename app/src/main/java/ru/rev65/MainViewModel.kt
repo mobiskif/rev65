@@ -16,7 +16,7 @@ class MainViewModel : ViewModel() {
     val idPat = repository.idPat
     val idTalon = repository.idTalon
     val histList = repository.histList
-    val patList = repository.patList
+    //val patList = repository.patList
     val lpuList = repository.lpuList
     val specList = repository.specList
     val docList = repository.docList
@@ -111,6 +111,11 @@ class MainViewModel : ViewModel() {
     fun getTalon(map: Map<String, String>) {
         viewModelScope.launch {
             repository.getTalon(map)
+        }
+    }
+    fun deleteTalon(map: Map<String, String>) {
+        viewModelScope.launch {
+            repository.deleteTalon(map)
         }
     }
 

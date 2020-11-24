@@ -1,7 +1,6 @@
 package ru.rev65
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -80,7 +79,6 @@ fun UI(model: MainViewModel) {
     val lpus = if (!model.lpuList.value.isNullOrEmpty()) model.lpuList.value as List else listOf()
     val specs = if (!model.specList.value.isNullOrEmpty()) model.specList.value as List else listOf()
     val docs = if (!model.docList.value.isNullOrEmpty()) model.docList.value as List else listOf()
-    val dist = if (!model.distrList.value.isNullOrEmpty()) model.distrList.value as List else listOf()
     val talons = if (!model.talonList.value.isNullOrEmpty()) model.talonList.value as List else listOf()
     val hist = if (!model.histList.value.isNullOrEmpty()) model.histList.value as List else listOf()
     val wait = model.wait.value == true
@@ -118,9 +116,7 @@ fun UI(model: MainViewModel) {
                 }
                 "Отложенные талоны" -> {
                     patItems(model)
-                    LazyColumnFor(hist) {
-                        histItems(it, model)
-                    }
+                    LazyColumnFor(hist) { histItems(it, model) }
                 }
                 "Взять талон" -> {
                     patItems(model)

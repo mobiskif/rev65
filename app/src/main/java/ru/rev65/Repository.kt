@@ -25,7 +25,7 @@ class Repository {
     private var _specList = MutableLiveData<List<Map<String, String>>>()
     val specList: LiveData<List<Map<String, String>>> = _specList
     private var _patList = MutableLiveData<List<Map<String, String>>>()
-    var patList: LiveData<List<Map<String, String>>> = _patList
+    private var patList: LiveData<List<Map<String, String>>> = _patList
     private var _lpuList = MutableLiveData<List<Map<String, String>>>()
     val lpuList: LiveData<List<Map<String, String>>> = _lpuList
     private var _usrList = MutableLiveData<List<Map<String, String>>>()
@@ -235,7 +235,19 @@ class Repository {
             _wait.postValue(true)
             val args = arrayOf(map["IdLpu"].toString(),map["IdAppointment"].toString(),map["idPat"].toString())
             //var res = Hub2().getTalon("SetAppointment", args)
-            val res = mutableListOf<Map<String,String>>(mapOf("Success" to "true"))
+            val res = mutableListOf(mapOf("Success" to "true"))
+            _idTalon.postValue(res[0])
+            _wait.postValue(false)
+        }
+    }
+
+    suspend fun deleteTalon(map: Map<String, String>){
+        Log.d("jop", "-- deleteTalon")
+        withContext(Dispatchers.IO) {
+            _wait.postValue(true)
+            val args = arrayOf(map["IdLpu"].toString(),map["IdAppointment"].toString(),map["idPat"].toString())
+            //var res = Hub2().getTalon("SetAppointment", args)
+            val res = mutableListOf(mapOf("Success" to "true"))
             _idTalon.postValue(res[0])
             _wait.postValue(false)
         }

@@ -1,6 +1,7 @@
+@file:Suppress("unused")
+
 package ru.rev65
 
-import android.util.Log
 import org.ksoap2.SoapEnvelope
 import org.ksoap2.serialization.PropertyInfo
 import org.ksoap2.serialization.SoapObject
@@ -144,8 +145,8 @@ class Hub2 {
         try {
             soap.debug = true
             soap.call(soapACTION, envelope)
-            var resultobj = envelope.bodyIn as SoapObject
-            var rootobj = resultobj.getProperty(0) as SoapObject
+            val resultobj = envelope.bodyIn as SoapObject
+            val rootobj = resultobj.getProperty(0) as SoapObject
             val ListHistoryVisit = rootobj.getProperty("ListHistoryVisit") as SoapObject
             for (i in 0 until ListHistoryVisit.propertyCount) {
                 val row: MutableMap<String, String> = mutableMapOf()
