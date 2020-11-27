@@ -1,6 +1,7 @@
 package ru.rev65
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -35,12 +36,15 @@ class MainActivity : AppCompatActivity() {
             model.readSpecList(usr)
         })
         model.idTalon.observe(this, {
+            Log.d("jop", "idTalon.observe() $it")
             val usr = model.user
             val spec = usr["NameSpesiality"]
             val dat = usr["VisitStart"]?.split("T")?.get(0)
             val tim = usr["VisitStart"]?.split("T")?.get(1)?.substring(0,5)
-            if (it["Success"]=="true") Toast.makeText(this, "Талон успешно отложен: \n$spec \n$dat $tim", Toast.LENGTH_LONG).show()
-            else Toast.makeText(this, "Талон не отложен: $it", Toast.LENGTH_LONG).show()
+            if (it["Success"]=="true" && it["Delete"]=="false") Toast.makeText(this, "Талон успешно отложен: \n$spec \n$dat $tim", Toast.LENGTH_LONG).show()
+            else if (it["Success"]=="true" && it["Delete"]=="true") Toast.makeText(this, "Талон отменен! \n$spec \n$dat $tim", Toast.LENGTH_LONG).show()
+            else Toast.makeText(this, "Ошибка. Действие не выполнено. $it", Toast.LENGTH_LONG).show()
+            model.readHistList(usr)
         })
     }
 
@@ -65,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             "Выбрать врача" -> state = "Выбрать специальность"
             "Отложенные талоны" -> state = "Выбрать специальность"
             "Выбрать талон" -> state = "Выбрать врача"
-            "Взять талон" -> state = "Выбрать талон"
+            "Взять талон" -> state = "Выбрать специальность"
             "Отменить талон" -> state = "Выбрать специальность"
         }
         model.setState(state)
@@ -119,6 +123,10 @@ fun UI(model: MainViewModel) {
                     LazyColumnFor(hist) { histItems(it, model) }
                 }
                 "Взять талон" -> {
+                    patItems(model)
+                    talonItemsEdit(model)
+                }
+                "Отменить талон" -> {
                     patItems(model)
                     talonItemsEdit(model)
                 }

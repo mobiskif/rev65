@@ -1,5 +1,6 @@
 package ru.rev65
 
+import android.util.Log
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -114,9 +115,12 @@ fun patItems(model: MainViewModel) {
                 if (state=="Выбрать клинику") Text(trimNull(user["R"]))
                 if (state=="Выбрать специальность") Text(trimNull(user["LPUShortName"]))
                 if (state=="Выбрать специальность") Text("№: "+trimNull(user["idPat"]))
+                if (state=="Отложенные талоны") Text(trimNull(user["LPUShortName"]))
+                if (state=="Отложенные талоны") Text("№: "+trimNull(user["idPat"]))
                 if (state=="Выбрать врача") Text(trimNull(user["NameSpesiality"]))
                 if (state=="Выбрать талон") Text(trimNull(user["DocName"]))
                 if (state=="Взять талон") Text(trimNull(user["DocName"]))
+                if (state=="Отменить талон") Text(trimNull(user["NameSpesiality"]))
                 //if (model.getState() != "Выбрать клинику" && wait) CircularProgressIndicator()
             }
         }
@@ -268,22 +272,20 @@ fun talonItems(map: Map<String, String>, model: MainViewModel) {
 @Composable
 fun talonItemsEdit(model: MainViewModel) {
     val usr = model.user as MutableMap
+    val clk_gettalon: (spec: Map<String, String>) -> Unit = {
+        Log.d("jop","get $it")
+        model.getTalon(usr)
+        model.setState("Выбрать специальность")
+    }
+    val clk_deltalon: (spec: Map<String, String>) -> Unit = {
+        model.deleteTalon(usr)
+        model.setState("Выбрать специальность")
+    }
 
     Row(modifier = mbord.then(mpadd).then(mfw)) {
         Column(mf062) {
             Text(trimNull("Талон №: "+usr["IdAppointment"]))
             Spacer(modifier = Modifier.height(8.dp))
-            Row(modifier = mpadd.then(mfw)) {
-
-                Button(onClick = {
-                    model.getTalon(usr)
-                    model.setState("Выбрать специальность")
-                }) { Text("Взять?") }
-
-                TextButton(onClick = {
-                    model.setState("Выбрать врача")
-                }) { Text("Нет") }
-            }
         }
         Column {
             val dat = usr["VisitStart"]?.split("T")?.get(0)
@@ -292,6 +294,15 @@ fun talonItemsEdit(model: MainViewModel) {
             Text(trimNull(tim))
         }
     }
+    Row(modifier = mpadd.then(mfw)) {
+        if (model.getState()=="Взять талон") {
+            Button(onClick = { clk_gettalon(usr) }) { Text("Взять талон?") }
+        }
+        else if (model.getState()=="Отменить талон") {
+            Button(onClick = { clk_deltalon(usr) }) { Text("Отменить талон?") }
+        }
+        TextButton(onClick = { model.setState("Выбрать специальность") }) { Text("Нет") }
+    }
     Spacer(modifier = Modifier.height(8.dp))
 }
 
@@ -299,8 +310,9 @@ fun talonItemsEdit(model: MainViewModel) {
 fun histItems(map: Map<String, String>, model: MainViewModel) {
     val usr = model.user as MutableMap
     val onclck: (spec: Map<String, String>) -> Unit = {
-        model.deleteTalon(it)
-        model.setState("Выбрать специальность")
+        //model.deleteTalon(it)
+        usr["IdAppointment"] = it["IdAppointment"].toString()
+        model.setState("Отменить талон")
     }
 
     if(!map["IdAppointment"].isNullOrEmpty()) {

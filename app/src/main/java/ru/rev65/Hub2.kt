@@ -2,6 +2,7 @@
 
 package ru.rev65
 
+import android.util.Log
 import org.ksoap2.SoapEnvelope
 import org.ksoap2.serialization.PropertyInfo
 import org.ksoap2.serialization.SoapObject
@@ -28,8 +29,8 @@ class Hub2 {
         try {
             androidHttpTransport.debug = true
             androidHttpTransport.call(soapACTION, envelope)
-            //Log.d("jop", androidHttpTransport.requestDump)
-            //Log.d("jop", androidHttpTransport.responseDump)
+            Log.d("jop", androidHttpTransport.requestDump)
+            Log.d("jop", androidHttpTransport.responseDump)
             //if (action.equals("CheckPatient")) Log.d("jop", androidHttpTransport.responseDump)
             val soapObj = envelope.response as SoapObject
             processObj(soapObj, PropertyInfo(), 0, list)
@@ -173,6 +174,13 @@ class Hub2 {
         return list
     }
 
+    fun deleteTalon(action: String, args: Array<String>): MutableList<Map<String, String>> {
+        val request = SoapObject(_xTEM, action)
+        request.addProperty("idLpu", args[0])
+        request.addProperty("idPat", args[1])
+        request.addProperty("idAppointment", args[2])
+        return getSoap(action, request)
+    }
 
 }
 

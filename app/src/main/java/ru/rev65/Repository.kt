@@ -234,9 +234,14 @@ class Repository {
         withContext(Dispatchers.IO) {
             _wait.postValue(true)
             val args = arrayOf(map["IdLpu"].toString(),map["IdAppointment"].toString(),map["idPat"].toString())
-            //var res = Hub2().getTalon("SetAppointment", args)
-            val res = mutableListOf(mapOf("Success" to "true"))
-            _idTalon.postValue(res[0])
+            var res = Hub2().getTalon("SetAppointment", args)
+            if (res[0]["Success"]=="true") {
+                val res2 = mutableListOf(mapOf("Success" to "true", "Delete" to "false"))
+                _idTalon.postValue(res2[0])
+            } else {
+                val res2 = mutableListOf(mapOf("Success" to "false", "Delete" to "false"))
+                _idTalon.postValue(res2[0])
+            }
             _wait.postValue(false)
         }
     }
@@ -245,10 +250,15 @@ class Repository {
         Log.d("jop", "-- deleteTalon")
         withContext(Dispatchers.IO) {
             _wait.postValue(true)
-            val args = arrayOf(map["IdLpu"].toString(),map["IdAppointment"].toString(),map["idPat"].toString())
-            //var res = Hub2().getTalon("SetAppointment", args)
-            val res = mutableListOf(mapOf("Success" to "true"))
-            _idTalon.postValue(res[0])
+            val args = arrayOf(map["IdLpu"].toString(),map["idPat"].toString(),map["IdAppointment"].toString())
+            var res = Hub2().deleteTalon("CreateClaimForRefusal", args)
+            if (res[0]["Success"]=="true") {
+                val res2 = mutableListOf(mapOf("Success" to "true", "Delete" to "true"))
+                _idTalon.postValue(res2[0])
+            } else {
+                val res2 = mutableListOf(mapOf("Success" to "false", "Delete" to "true"))
+                _idTalon.postValue(res2[0])
+            }
             _wait.postValue(false)
         }
     }
