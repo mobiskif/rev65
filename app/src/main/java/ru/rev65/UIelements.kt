@@ -45,7 +45,10 @@ fun myFab(model: MainViewModel) {
             Icon(Icons.Filled.Add)
         }
     } else if (model.getState() == "Выбрать специальность") {
-        FloatingActionButton(onClick = { model.setState("Отложенные талоны") }) {
+        FloatingActionButton(onClick = {
+            model.readHistList(model.user)
+            model.setState("Отложенные талоны")
+        }) {
             Icon(Icons.Filled.DateRange)
         }
     }

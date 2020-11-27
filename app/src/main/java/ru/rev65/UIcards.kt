@@ -86,7 +86,8 @@ fun usrItemsEdit(model: MainViewModel) {
                         usr["D"] = dD.value.text
                         usr["R"] = rR.value.text
                         usr["iR"] = irR.value.text
-                        if (model.getState() == "Добавить пациента") model.createUser(usr) else model.updateUser(usr)
+                        if (model.getState() == "Добавить пациента") model.createUser(usr)
+                        else model.updateUser(usr)
                         model.setState("Выбрать пациента")
                     }) { Text("Сохранить") }
                 }
@@ -133,7 +134,7 @@ fun usrItems(map: Map<String, String>, model: MainViewModel) {
     val onclck: (usr: Map<String, String>) -> Unit = {
         model.user = it
         model.setState("Выбрать клинику")
-        model.readLpuList(it as MutableMap<String, String>)
+        model.readLpuList(it)
     }
 
     Row(modifier = mbord.then(mpadd).then(mfw)) {
@@ -172,7 +173,7 @@ fun lpuItems(map: Map<String, String>, model: MainViewModel) {
         usr["LPUShortName"] = it["LPUShortName"].toString()
         model.user = usr
         model.checkPat(usr)
-        model.readHistList(usr)
+        //model.readHistList(usr)
         model.setState("Выбрать специальность")
     }
     Row(modifier = mbord.then(mpadd).then(mfw)) {

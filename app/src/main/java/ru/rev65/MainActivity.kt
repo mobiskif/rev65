@@ -36,15 +36,13 @@ class MainActivity : AppCompatActivity() {
             model.readSpecList(usr)
         })
         model.idTalon.observe(this, {
-            Log.d("jop", "idTalon.observe() $it")
-            val usr = model.user
-            val spec = usr["NameSpesiality"]
-            val dat = usr["VisitStart"]?.split("T")?.get(0)
-            val tim = usr["VisitStart"]?.split("T")?.get(1)?.substring(0,5)
-            if (it["Success"]=="true" && it["Delete"]=="false") Toast.makeText(this, "Талон успешно отложен: \n$spec \n$dat $tim", Toast.LENGTH_LONG).show()
-            else if (it["Success"]=="true" && it["Delete"]=="true") Toast.makeText(this, "Талон отменен! \n$spec \n$dat $tim", Toast.LENGTH_LONG).show()
-            else Toast.makeText(this, "Ошибка. Действие не выполнено. $it", Toast.LENGTH_LONG).show()
-            model.readHistList(usr)
+            if (it["Success"] == "true") {
+                if (it["Delete"] == "false") Toast.makeText(this, "Талон отложен!", Toast.LENGTH_LONG).show()
+                else Toast.makeText(this, "Талон отменен!", Toast.LENGTH_LONG).show()
+                model.readHistList(model.user)
+                model.setState("Отложенные талоны")
+            }
+            else Toast.makeText(this, "Действие не выполнено, отказ!", Toast.LENGTH_LONG).show()
         })
     }
 
@@ -61,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         var state = model.getState()
         when (state) {
-            //"Выбрать пациента" -> state = if (model.isAdmin) "Search top 10" else "Выбрать пациента"
+            "Выбрать пациента" -> state = if (model.isAdmin) "Search top 10" else "Выбрать пациента"
             "Выбрать клинику" -> state = "Выбрать пациента"
             "Изменить пациента" -> state = "Выбрать пациента"
             "Добавить пациента" -> state = "Выбрать пациента"

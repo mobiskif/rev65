@@ -173,7 +173,7 @@ class Repository {
         }
     }
 
-    suspend fun readLpuList(map: MutableMap<String, String>) {
+    suspend fun readLpuList(map: Map<String, String>) {
         Log.d("jop", "-- readLpuList")
         withContext(Dispatchers.IO) {
             _wait.postValue(true)

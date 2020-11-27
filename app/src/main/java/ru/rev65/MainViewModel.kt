@@ -12,11 +12,11 @@ class MainViewModel : ViewModel() {
     lateinit var usrfile: File
 
     private val repository = Repository()
+    val isAdmin = false
     val wait = repository.wait
     val idPat = repository.idPat
     val idTalon = repository.idTalon
     val histList = repository.histList
-    //val patList = repository.patList
     val lpuList = repository.lpuList
     val specList = repository.specList
     val docList = repository.docList
@@ -31,22 +31,6 @@ class MainViewModel : ViewModel() {
         return "${state.value}"
     }
 
-    fun createUser(usr: Map<String, String>) {
-        viewModelScope.launch {
-            repository.addUserToList(usr)
-        }
-    }
-    fun updateUser(usr: MutableMap<String, String>) {
-        viewModelScope.launch {
-            repository.updateUserInList(usr)
-        }
-    }
-    fun deleteUser(usr: MutableMap<String, String>) {
-        viewModelScope.launch {
-            repository.deleteUserFromList(usr)
-        }
-    }
-
     fun readUsrList() {
         viewModelScope.launch {
             repository.readUsrList(usrfile)
@@ -58,13 +42,21 @@ class MainViewModel : ViewModel() {
         }
     }
 
-/*
-    fun updatePats() {
+    fun createUser(usr: Map<String, String>) {
         viewModelScope.launch {
-            repository.updateIdPat(user)
+            repository.addUserToList(usr)
         }
     }
-*/
+    fun updateUser(usr: Map<String, String>) {
+        viewModelScope.launch {
+            repository.updateUserInList(usr)
+        }
+    }
+    fun deleteUser(usr: Map<String, String>) {
+        viewModelScope.launch {
+            repository.deleteUserFromList(usr)
+        }
+    }
 
     private fun readDistrList() {
         viewModelScope.launch {
@@ -72,21 +64,21 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun readLpuList(map: MutableMap<String, String>) {
+    fun readLpuList(usr: Map<String, String>) {
         viewModelScope.launch {
-            repository.readLpuList(map)
+            repository.readLpuList(usr)
         }
     }
 
-    fun checkPat(map: MutableMap<String, String>) {
+    fun checkPat(usr: Map<String, String>) {
         viewModelScope.launch {
-            repository.checkPat(map)
+            repository.checkPat(usr)
         }
     }
 
-    fun readSpecList(map: Map<String, String>) {
+    fun readSpecList(usr: Map<String, String>) {
         viewModelScope.launch {
-            repository.readSpecList(map)
+            repository.readSpecList(usr)
         }
     }
 
