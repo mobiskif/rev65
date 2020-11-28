@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
             val usr = model.user as MutableMap
             usr["idPat"] = it["IdPat"].toString()
             model.updateUser(usr)
+            model.readHiistList(ust)
             model.readSpecList(usr)
         })
         model.idTalon.observe(this, {
