@@ -24,8 +24,9 @@ class Repository {
     val docList: LiveData<List<Map<String, String>>> = _docList
     private var _specList = MutableLiveData<List<Map<String, String>>>()
     val specList: LiveData<List<Map<String, String>>> = _specList
-    private var _patList = MutableLiveData<List<Map<String, String>>>()
-    private var patList: LiveData<List<Map<String, String>>> = _patList
+
+    //private var _patList = MutableLiveData<List<Map<String, String>>>()
+    //private var patList: LiveData<List<Map<String, String>>> = _patList
     private var _lpuList = MutableLiveData<List<Map<String, String>>>()
     val lpuList: LiveData<List<Map<String, String>>> = _lpuList
     private var _usrList = MutableLiveData<List<Map<String, String>>>()
@@ -58,12 +59,12 @@ class Repository {
             if (usrfile.length() > 0) {
                 val fis = FileInputStream(usrfile)
                 val ois = ObjectInputStream(fis)
+                @Suppress("UNCHECKED_CAST")
                 val usrlist = ois.readObject() as List<Map<String, String>>
-                fis.close()
                 _usrList.postValue(usrlist)
                 Log.d("jop", "$usrfile прочитано: $usrlist")
+                fis.close()
             } else _usrList.postValue(previewList.value)
-
         } catch (e: Exception) {
             _usrList.postValue(previewList.value)
         }
@@ -80,6 +81,7 @@ class Repository {
         _wait.postValue(false)
     }
 
+    /*
     suspend fun updateIdPat(map: Map<String, String>) {
         Log.d("jop", "-- updateIdPat")
         val lpuLf = lpuList.value!!
@@ -89,8 +91,6 @@ class Repository {
                 val withoutPat = if (patList.value.isNullOrEmpty()) mutableListOf() else patList.value as MutableList
                 val currentPat = mutableMapOf<String, String>()
                 val res = checkPat(map)
-                //val res = mapOf<String,String>()
-                //currentPat["IdPat"] = "7"
                 currentPat["IdPat"] = res["IdPat"].toString()
                 currentPat["IdLPU"] = lpu["IdLPU"].toString()
                 currentPat["Success"] = res["Success"].toString()
@@ -100,6 +100,7 @@ class Repository {
             }
         }
     }
+    */
 
     suspend fun checkPat(map: Map<String, String>): Map<String, String> {
         Log.d("jop", "-- checkPat")
@@ -200,7 +201,7 @@ class Repository {
         Log.d("jop", "-- readDocList")
         withContext(Dispatchers.IO) {
             _wait.postValue(true)
-            val args = arrayOf(map["IdLpu"].toString(),map["IdSpesiality"].toString(),map["idPat"].toString())
+            val args = arrayOf(map["IdLpu"].toString(), map["IdSpesiality"].toString(), map["idPat"].toString())
             val res = Hub2().getDocList("GetDoctorList", args)
             _docList.postValue(res)
             _wait.postValue(false)
@@ -211,7 +212,7 @@ class Repository {
         Log.d("jop", "-- readTalonList")
         withContext(Dispatchers.IO) {
             _wait.postValue(true)
-            val args = arrayOf(map["IdLpu"].toString(),map["IdDoc"].toString(),map["idPat"].toString())
+            val args = arrayOf(map["IdLpu"].toString(), map["IdDoc"].toString(), map["idPat"].toString())
             val res = Hub2().getTalonList("GetAvaibleAppointments", args)
             _talonList.postValue(res)
             _wait.postValue(false)
@@ -222,20 +223,20 @@ class Repository {
         Log.d("jop", "-- readHistList")
         withContext(Dispatchers.IO) {
             _wait.postValue(true)
-            val args = arrayOf(map["IdLpu"].toString(),map["idPat"].toString())
+            val args = arrayOf(map["IdLpu"].toString(), map["idPat"].toString())
             val res = Hub2().getHistList("GetPatientHistory", args)
             _histList.postValue(res)
             _wait.postValue(false)
         }
     }
 
-    suspend fun getTalon(map: Map<String, String>){
+    suspend fun getTalon(map: Map<String, String>) {
         Log.d("jop", "-- getTalon")
         withContext(Dispatchers.IO) {
             _wait.postValue(true)
-            val args = arrayOf(map["IdLpu"].toString(),map["IdAppointment"].toString(),map["idPat"].toString())
-            var res = Hub2().getTalon("SetAppointment", args)
-            if (res[0]["Success"]=="true") {
+            val args = arrayOf(map["IdLpu"].toString(), map["IdAppointment"].toString(), map["idPat"].toString())
+            val res = Hub2().getTalon("SetAppointment", args)
+            if (res[0]["Success"] == "true") {
                 val res2 = mutableListOf(mapOf("Success" to "true", "Delete" to "false"))
                 _idTalon.postValue(res2[0])
             } else {
@@ -246,13 +247,13 @@ class Repository {
         }
     }
 
-    suspend fun deleteTalon(map: Map<String, String>){
+    suspend fun deleteTalon(map: Map<String, String>) {
         Log.d("jop", "-- deleteTalon")
         withContext(Dispatchers.IO) {
             _wait.postValue(true)
-            val args = arrayOf(map["IdLpu"].toString(),map["idPat"].toString(),map["IdAppointment"].toString())
-            var res = Hub2().deleteTalon("CreateClaimForRefusal", args)
-            if (res[0]["Success"]=="true") {
+            val args = arrayOf(map["IdLpu"].toString(), map["idPat"].toString(), map["IdAppointment"].toString())
+            val res = Hub2().deleteTalon("CreateClaimForRefusal", args)
+            if (res[0]["Success"] == "true") {
                 val res2 = mutableListOf(mapOf("Success" to "true", "Delete" to "true"))
                 _idTalon.postValue(res2[0])
             } else {

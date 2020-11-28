@@ -67,25 +67,23 @@ fun usrItemsEdit(model: MainViewModel) {
                 myDistrictSpinner(model, rR, irR)
 
                 val usr = model.user.toMutableMap()
+                val fieldstouser: () -> Unit = {
+                    usr["F"] = fF.value.text
+                    usr["I"] = iI.value.text
+                    usr["O"] = oO.value.text
+                    usr["D"] = dD.value.text
+                    usr["R"] = rR.value.text
+                    usr["iR"] = irR.value.text
+                }
                 Row {
                     TextButton(onClick = {
-                        usr["F"] = fF.value.text
-                        usr["I"] = iI.value.text
-                        usr["O"] = oO.value.text
-                        usr["D"] = dD.value.text
-                        usr["R"] = rR.value.text
-                        usr["iR"] = irR.value.text
+                        fieldstouser()
                         model.deleteUser(usr)
                         model.setState("Выбрать пациента")
                     }) { Text("Удалить") }
 
                     Button(onClick = {
-                        usr["F"] = fF.value.text
-                        usr["I"] = iI.value.text
-                        usr["O"] = oO.value.text
-                        usr["D"] = dD.value.text
-                        usr["R"] = rR.value.text
-                        usr["iR"] = irR.value.text
+                        fieldstouser()
                         if (model.getState() == "Добавить пациента") model.createUser(usr)
                         else model.updateUser(usr)
                         model.setState("Выбрать пациента")
@@ -101,7 +99,6 @@ fun usrItemsEdit(model: MainViewModel) {
 fun patItems(model: MainViewModel) {
     val user = model.user
     val state = model.state.value
-    val wait = model.wait.value == true
     val onclck: (usr: Map<String, String>) -> Unit = {
         model.setState("Изменить пациента")
     }
@@ -205,8 +202,6 @@ fun specItems(map: Map<String, String>, model: MainViewModel) {
             }
             Column {
                 Text("Талонов: ${map["CountFreeParticipantIE"]}")
-                //Text("Резерв: ${map["CountFreeTicket"]}")
-                //Text("${spec["NearestDate"]}\n${spec["LastDate"]}")
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -253,8 +248,7 @@ fun talonItems(map: Map<String, String>, model: MainViewModel) {
         model.setState("Взять талон")
     }
 
-    if (map["IdAppointment"]=="null") { }
-    else {
+    if (map["IdAppointment"]!="null") {
         Row(modifier = mbord.then(mpadd).then(mfw)) {
             Column(mf062.clickable(onClick = { onclck(map) })) {
                 Text(trimNull("Талон №: " + map["IdAppointment"]))
@@ -273,12 +267,12 @@ fun talonItems(map: Map<String, String>, model: MainViewModel) {
 @Composable
 fun talonItemsEdit(model: MainViewModel) {
     val usr = model.user as MutableMap
-    val clk_gettalon: (spec: Map<String, String>) -> Unit = {
+    val clkgettalon: (spec: Map<String, String>) -> Unit = {
         Log.d("jop","get $it")
         model.getTalon(usr)
         model.setState("Выбрать специальность")
     }
-    val clk_deltalon: (spec: Map<String, String>) -> Unit = {
+    val clkdeltalon: (spec: Map<String, String>) -> Unit = {
         model.deleteTalon(usr)
         model.setState("Выбрать специальность")
     }
@@ -297,10 +291,10 @@ fun talonItemsEdit(model: MainViewModel) {
     }
     Row(modifier = mpadd.then(mfw)) {
         if (model.getState()=="Взять талон") {
-            Button(onClick = { clk_gettalon(usr) }) { Text("Взять талон?") }
+            Button(onClick = { clkgettalon(usr) }) { Text("Взять талон?") }
         }
         else if (model.getState()=="Отменить талон") {
-            Button(onClick = { clk_deltalon(usr) }) { Text("Отменить талон?") }
+            Button(onClick = { clkdeltalon(usr) }) { Text("Отменить талон?") }
         }
         TextButton(onClick = { model.setState("Выбрать специальность") }) { Text("Нет") }
     }
