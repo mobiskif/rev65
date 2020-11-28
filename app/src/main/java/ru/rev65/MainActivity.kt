@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             "Изменить пациента" -> state = "Выбрать пациента"
             "Добавить пациента" -> state = "Выбрать пациента"
             "Выбрать специальность" -> state = "Выбрать клинику"
+            "Мои карточки" -> state = "Выбрать клинику"
             "Выбрать врача" -> state = "Выбрать специальность"
             "Отложенные талоны" -> state = "Выбрать специальность"
             "Выбрать талон" -> state = "Выбрать врача"
@@ -85,6 +86,7 @@ class MainActivity : AppCompatActivity() {
 fun UI(model: MainViewModel) {
     val usrs = if (!model.usrList.value.isNullOrEmpty()) model.usrList.value as List else listOf()
     val lpus = if (!model.lpuList.value.isNullOrEmpty()) model.lpuList.value as List else listOf()
+    val pats = if (!model.patList.value.isNullOrEmpty()) model.patList.value as List else listOf()
     val specs = if (!model.specList.value.isNullOrEmpty()) model.specList.value as List else listOf()
     val docs = if (!model.docList.value.isNullOrEmpty()) model.docList.value as List else listOf()
     val talons = if (!model.talonList.value.isNullOrEmpty()) model.talonList.value as List else listOf()
@@ -110,6 +112,10 @@ fun UI(model: MainViewModel) {
                     "Выбрать клинику" -> {
                         patItems(model)
                         LazyColumnFor(lpus) { lpuItems(it, model) }
+                    }
+                    "Мои карточки" -> {
+                        patItems(model)
+                        LazyColumnFor(pats) { cardItems(it, model) }
                     }
                     "Выбрать специальность" -> {
                         patItems(model)

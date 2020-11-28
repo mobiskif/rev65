@@ -46,8 +46,6 @@ val typography = Typography(
     */
 )
 
-val error = typography.overline
-
 /*
 val LightPalette = lightColors(
         //primary = Color(android.graphics.Color.parseColor("#c2185b")),

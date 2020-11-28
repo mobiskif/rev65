@@ -18,6 +18,7 @@ class MainViewModel : ViewModel() {
     val idTalon = repository.idTalon
     val histList = repository.histList
     val lpuList = repository.lpuList
+    val patList = repository.patList
     val specList = repository.specList
     val docList = repository.docList
     val talonList = repository.talonList
@@ -70,10 +71,19 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun checkPat(usr: Map<String, String>) {
+    fun updatePatList(usr: Map<String, String>) {
         viewModelScope.launch {
-            repository.checkPat(usr)
+            repository.updatePatList(usr)
         }
+    }
+
+    fun checkPat(usr: Map<String, String>): Map<String,String> {
+        var res = mapOf<String,String>()
+        viewModelScope.launch {
+            res = repository.checkPat(usr)
+            repository._idPat.postValue(res)
+        }
+        return res
     }
 
     fun readSpecList(usr: Map<String, String>) {

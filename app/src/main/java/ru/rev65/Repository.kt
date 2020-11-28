@@ -14,7 +14,7 @@ class Repository {
     val wait: LiveData<Boolean> = _wait
     private val _idTalon = MutableLiveData<Map<String, String>>()
     val idTalon: LiveData<Map<String, String>> = _idTalon
-    private val _idPat = MutableLiveData<Map<String, String>>()
+    val _idPat = MutableLiveData<Map<String, String>>()
     val idPat: LiveData<Map<String, String>> = _idPat
     private var _histList = MutableLiveData<List<Map<String, String>>>()
     val histList: LiveData<List<Map<String, String>>> = _histList
@@ -25,8 +25,8 @@ class Repository {
     private var _specList = MutableLiveData<List<Map<String, String>>>()
     val specList: LiveData<List<Map<String, String>>> = _specList
 
-    //private var _patList = MutableLiveData<List<Map<String, String>>>()
-    //private var patList: LiveData<List<Map<String, String>>> = _patList
+    private var _patList = MutableLiveData<List<Map<String, String>>>()
+    var patList: LiveData<List<Map<String, String>>> = _patList
     private var _lpuList = MutableLiveData<List<Map<String, String>>>()
     val lpuList: LiveData<List<Map<String, String>>> = _lpuList
     private var _usrList = MutableLiveData<List<Map<String, String>>>()
@@ -84,26 +84,33 @@ class Repository {
         _wait.postValue(false)
     }
 
-    /*
-    suspend fun updateIdPat(map: Map<String, String>) {
+
+    suspend fun updatePatList(map: Map<String, String>) {
         Log.d("jop", "-- updateIdPat")
-        val lpuLf = lpuList.value!!
-        for (lpu in lpuLf) {
+        //val lpuLf = lpuList.value!!
+        var mapm = map as MutableMap
+        for (lpu in lpuList.value!!) {
             withContext(Dispatchers.IO) {
                 _wait.postValue(true)
                 val withoutPat = if (patList.value.isNullOrEmpty()) mutableListOf() else patList.value as MutableList
                 val currentPat = mutableMapOf<String, String>()
+                map["IdLpu"] = lpu["IdLPU"].toString()
                 val res = checkPat(map)
+                //val res = map
                 currentPat["IdPat"] = res["IdPat"].toString()
                 currentPat["IdLPU"] = lpu["IdLPU"].toString()
+                currentPat["LPUFullName"] = lpu["LPUFullName"].toString()
+                currentPat["LPUShortName"] = lpu["LPUShortName"].toString()
+                currentPat["Description"] = lpu["Description"].toString()
                 currentPat["Success"] = res["Success"].toString()
                 withoutPat.add(currentPat)
                 _patList.postValue(withoutPat)
+                //Log.d("jop","$res")
                 _wait.postValue(false)
             }
         }
     }
-    */
+
 
     suspend fun checkPat(map: Map<String, String>): Map<String, String> {
         Log.d("jop", "-- checkPat")
@@ -131,7 +138,7 @@ class Repository {
             }
             _wait.postValue(false)
         }
-        _idPat.postValue(result)
+        //_idPat.postValue(result)
         return result
     }
 

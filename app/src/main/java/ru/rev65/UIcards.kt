@@ -122,7 +122,14 @@ fun patItems(model: MainViewModel) {
                 Text("${user["D"]} ", style = typography.body1)
             }
             Column(mpadd) {
-                if (state == "Выбрать клинику") Text(trimNull(user["R"]), style = typography.body2)
+                if (state == "Выбрать клинику") {
+                    Text(trimNull(user["R"]), style = typography.body2)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    TextButton(modifier = mbord, onClick = {
+                        model.updatePatList(user)
+                        model.setState("Мои карточки")
+                    }) { Text("Карточки", style = typography.body2) }
+                }
                 else if (user["idPatSuccess"] == "true") {
                     if (state == "Выбрать специальность") {
                         Text(trimNull(user["LPUShortName"]), style = typography.body2)
@@ -133,6 +140,7 @@ fun patItems(model: MainViewModel) {
                         Text("№: " + trimNull(user["idPat"]), style = typography.body2)
                     }
                     if (state == "Выбрать врача") Text(trimNull(user["NameSpesiality"]), style = typography.body2)
+                    if (state == "Мои карточки") Text(trimNull(user["R"]), style = typography.body2)
                     if (state == "Выбрать талон") Text(trimNull(user["DocName"]), style = typography.body2)
                     if (state == "Взять талон") Text(trimNull(user["DocName"]), style = typography.body2)
                     if (state == "Отменить талон") Text(trimNull(user["NameSpesiality"]), style = typography.body2)
@@ -189,8 +197,8 @@ fun lpuItems(map: Map<String, String>, model: MainViewModel) {
     val onclck: (lpu: Map<String, String>) -> Unit = {
         usr["IdLpu"] = it["IdLPU"].toString()
         usr["LPUShortName"] = it["LPUShortName"].toString()
+        usr["IdPat"] = model.checkPat(usr).toString()
         model.user = usr
-        model.checkPat(usr)
         //model.readHistList(usr)
         model.setState("Выбрать специальность")
     }
@@ -200,9 +208,38 @@ fun lpuItems(map: Map<String, String>, model: MainViewModel) {
         }
         Column(Modifier.clickable(onClick = { onclck(map) }).then(mpadd)) {
             Text(text="${map["LPUShortName"]}", style = typography.body2)
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text="${map["Description"]}", style = typography.overline)
         }
     }
+    Spacer(modifier = Modifier.height(8.dp))
+}
 
+@Composable
+fun cardItems(map: Map<String, String>, model: MainViewModel) {
+    val usr = model.user as MutableMap
+    val onclck: (lpu: Map<String, String>) -> Unit = {
+        usr["IdLpu"] = it["IdLPU"].toString()
+        usr["LPUShortName"] = it["LPUShortName"].toString()
+        usr["IdPat"] = it["IdPat"].toString()
+        usr["IdPat"] = model.checkPat(usr).toString()
+        model.user = usr
+        //model.readHistList(usr)
+        model.setState("Выбрать специальность")
+    }
+    Row(modifier = mbord.then(mpadd).then(mfw)) {
+        Column(Modifier.clickable(onClick = { onclck(map) }).then(mf062).then(mpadd)) {
+            //Text(text="${map["LPUFullName"]}", style = typography.body1)
+            if (map["Success"]=="true") Text(text="Карточка №:", style = typography.body1)
+            Text(text="${trimNull(map["IdPat"])}", style = typography.body1)
+        }
+        Column(Modifier.clickable(onClick = { onclck(map) }).then(mpadd)) {
+            Text(text="${map["LPUShortName"]}", style = typography.body2)
+            //Spacer(modifier = Modifier.height(16.dp))
+            //Text(text="${map["IdLPU"]}", style = typography.overline)
+            //Text(text="${map["Description"]}", style = typography.overline)
+        }
+    }
     Spacer(modifier = Modifier.height(8.dp))
 }
 
