@@ -2,6 +2,8 @@ package ru.rev65
 
 import android.util.Log
 import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -99,12 +101,13 @@ fun usrItemsEdit(model: MainViewModel) {
 fun patItems(model: MainViewModel) {
     val user = model.user
     val state = model.state.value
+    val col = Modifier.border(3.dp, color =  MaterialTheme.colors.primary, shape = Shapes().medium)
     val onclck: (usr: Map<String, String>) -> Unit = {
         model.setState("Изменить пациента")
     }
     val currentState = model.getState()
     if (currentState != "Выбрать пациента") {
-        Row(modifier = mGray.then(mpadd).then(mfw)) {
+        Row(modifier = col.then(mpadd).then(mfw)) {
             Column(mf062.clickable(onClick = { onclck(user) })) {
                 Text("${user["F"]} ${user["I"]} ${user["O"]}")
                 Text("${user["D"]} ")
