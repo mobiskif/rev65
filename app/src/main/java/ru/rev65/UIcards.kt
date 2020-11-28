@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.currentTextStyle
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -13,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
@@ -40,25 +42,30 @@ fun usrItemsEdit(model: MainViewModel) {
     }
     ScrollableColumn {
 
+
         Row {
             Column {
                 OutlinedTextField(
                     value = fF.value,
+                    textStyle = TextStyle(color=MaterialTheme.colors.onSurface),
                     onValueChange = { fF.value = it },
                     label = { Text("Фамилия") }//, modifier = Modifier.padding(0.dp, 8.dp)
                 )
                 OutlinedTextField(
                     value = iI.value,
+                    textStyle = TextStyle(color=MaterialTheme.colors.onSurface),
                     onValueChange = { iI.value = it },
                     label = { Text("Имя") }//, modifier = Modifier.padding(0.dp, 8.dp)
                 )
                 OutlinedTextField(
                     value = oO.value,
+                    textStyle = TextStyle(color=MaterialTheme.colors.onSurface),
                     onValueChange = { oO.value = it },
                     label = { Text("Отчество") }//, modifier = Modifier.padding(0.dp, 8.dp)
                 )
                 OutlinedTextField(
                     value = dD.value,
+                    textStyle = TextStyle(color=MaterialTheme.colors.onSurface),
                     onValueChange = { dD.value = it },
                     label = { Text("Дата рождения") }, //modifier = Modifier.padding(0.dp, 8.dp),
                     placeholder = { Text(text = "1986-04-26") }
@@ -122,8 +129,8 @@ fun patItems(model: MainViewModel) {
                         Text("№: " + trimNull(user["idPat"]), style = typography.body2)
                     }
                     if (state == "Отложенные талоны") {
-                        Text(trimNull(user["LPUShortName"]))
-                        Text("№: " + trimNull(user["idPat"]))
+                        Text(trimNull(user["LPUShortName"]), style = typography.body2)
+                        Text("№: " + trimNull(user["idPat"]), style = typography.body2)
                     }
                     if (state == "Выбрать врача") Text(trimNull(user["NameSpesiality"]), style = typography.body2)
                     if (state == "Выбрать талон") Text(trimNull(user["DocName"]), style = typography.body2)
