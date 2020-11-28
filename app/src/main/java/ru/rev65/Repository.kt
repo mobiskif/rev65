@@ -35,21 +35,21 @@ class Repository {
     val distrList: LiveData<List<Map<String, String>>> = _distrList
 
     private val pat1 = mapOf(
-        "F" to "Пархимович",
-        "I" to "Дмитрий",
-        "O" to "Леонидович",
-        "D" to "1966-09-03",
-        "R" to "Кировский",
-        "iR" to "5",
+        "F" to "Пациент",
+        "I" to "Номер",
+        "O" to "Один",
+        "D" to "1976-09-03",
+        "R" to "Адмиралтейский",
+        "iR" to "1",
         "id" to "${Math.random()}"
     )
     private val pat2 = mapOf(
-        "F" to "Пархимович",
-        "I" to "Дарья",
-        "O" to "Дмитриевна",
-        "D" to "2014-06-29",
+        "F" to "Пациент",
+        "I" to "Номер",
+        "O" to "Два",
+        "D" to "2014-05-29",
         "R" to "Красносельский",
-        "iR" to "4",
+        "iR" to "8",
         "id" to "${Math.random()}"
     )
     private val previewList = MutableLiveData<List<Map<String, String>>>(mutableListOf(pat1, pat2, pat1))
@@ -59,10 +59,13 @@ class Repository {
             if (usrfile.length() > 0) {
                 val fis = FileInputStream(usrfile)
                 val ois = ObjectInputStream(fis)
-                @Suppress("UNCHECKED_CAST")
-                val usrlist = ois.readObject() as List<Map<String, String>>
-                _usrList.postValue(usrlist)
-                Log.d("jop", "$usrfile прочитано: $usrlist")
+                //@Suppress("UNCHECKED_CAST")
+                val usrlist = ois.readObject() //as List<Map<String, String>>
+                if (usrlist is List<*>) {
+                    val a: List<Map<String, String>> = usrlist.filterIsInstance<Map<String, String>>()
+                    _usrList.postValue(a)
+                    Log.d("jop", "$usrfile прочитано: $usrlist")
+                }
                 fis.close()
             } else _usrList.postValue(previewList.value)
         } catch (e: Exception) {

@@ -85,48 +85,50 @@ fun UI(model: MainViewModel) {
     val hist = if (!model.histList.value.isNullOrEmpty()) model.histList.value as List else listOf()
     val wait = model.wait.value == true
 
-    Scaffold(floatingActionButton = { myFab(model) }) {
-        Column(modifier = mpadd) {
-            if (wait) LinearProgressIndicator(mfw)
-            Text(model.getState())
-            Spacer(modifier = Modifier.height(8.dp))
-            when (model.getState()) {
-                "Изменить пациента" -> {
-                    usrItemsEdit(model)
-                }
-                "Добавить пациента" -> {
-                    usrItemsEdit(model)
-                }
-                "Выбрать пациента" -> {
-                    LazyColumnFor(usrs) { usrItems(it, model) }
-                }
-                "Выбрать клинику" -> {
-                    patItems(model)
-                    LazyColumnFor(lpus) { lpuItems(it, model) }
-                }
-                "Выбрать специальность" -> {
-                    patItems(model)
-                    LazyColumnFor(specs) { specItems(it, model) }
-                }
-                "Выбрать врача" -> {
-                    patItems(model)
-                    LazyColumnFor(docs) { docItems(it, model) }
-                }
-                "Выбрать талон" -> {
-                    patItems(model)
-                    LazyColumnFor(talons) { talonItems(it, model) }
-                }
-                "Отложенные талоны" -> {
-                    patItems(model)
-                    LazyColumnFor(hist) { histItems(it, model) }
-                }
-                "Взять талон" -> {
-                    patItems(model)
-                    talonItemsEdit(model)
-                }
-                "Отменить талон" -> {
-                    patItems(model)
-                    talonItemsEdit(model)
+    myTheme {
+        Scaffold(floatingActionButton = { myFab(model) }) {
+            Column(modifier = mpadd) {
+                if (wait) LinearProgressIndicator(mfw)
+                Text(model.getState())
+                Spacer(modifier = Modifier.height(8.dp))
+                when (model.getState()) {
+                    "Изменить пациента" -> {
+                        usrItemsEdit(model)
+                    }
+                    "Добавить пациента" -> {
+                        usrItemsEdit(model)
+                    }
+                    "Выбрать пациента" -> {
+                        LazyColumnFor(usrs) { usrItems(it, model) }
+                    }
+                    "Выбрать клинику" -> {
+                        patItems(model)
+                        LazyColumnFor(lpus) { lpuItems(it, model) }
+                    }
+                    "Выбрать специальность" -> {
+                        patItems(model)
+                        LazyColumnFor(specs) { specItems(it, model) }
+                    }
+                    "Выбрать врача" -> {
+                        patItems(model)
+                        LazyColumnFor(docs) { docItems(it, model) }
+                    }
+                    "Выбрать талон" -> {
+                        patItems(model)
+                        LazyColumnFor(talons) { talonItems(it, model) }
+                    }
+                    "Отложенные талоны" -> {
+                        patItems(model)
+                        LazyColumnFor(hist) { histItems(it, model) }
+                    }
+                    "Взять талон" -> {
+                        patItems(model)
+                        talonItemsEdit(model)
+                    }
+                    "Отменить талон" -> {
+                        patItems(model)
+                        talonItemsEdit(model)
+                    }
                 }
             }
         }
