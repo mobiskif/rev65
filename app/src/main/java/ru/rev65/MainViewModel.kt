@@ -47,7 +47,7 @@ class MainViewModel : ViewModel() {
             repository.addUserToList(usr)
         }
     }
-    fun updateUser(usr: Map<String, String>) {
+    fun updateUserInList(usr: Map<String, String>) {
         viewModelScope.launch {
             repository.updateUserInList(usr)
         }

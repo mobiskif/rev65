@@ -2,7 +2,6 @@ package ru.rev65
 
 import android.util.Log
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -86,8 +85,11 @@ fun usrItemsEdit(model: MainViewModel) {
 
                     Button(onClick = {
                         fieldstouser()
-                        if (model.getState() == "Добавить пациента") model.createUser(usr)
-                        else model.updateUser(usr)
+                        if (model.getState() == "Добавить пациента") {
+                            usr["id"] = "${Math.random()}"
+                            model.createUser(usr)
+                        }
+                        else model.updateUserInList(usr)
                         model.setState("Выбрать пациента")
                     }) { Text("Сохранить") }
                 }
@@ -200,7 +202,7 @@ fun specItems(map: Map<String, String>, model: MainViewModel) {
     val onclck: (spec: Map<String, String>) -> Unit = {
         usr["IdSpesiality"] = it["IdSpesiality"].toString()
         usr["NameSpesiality"] = it["NameSpesiality"].toString()
-        model.updateUser(usr)
+        model.updateUserInList(usr)
         model.setState("Выбрать врача")
         model.readDocList(usr)
     }
@@ -225,7 +227,7 @@ fun docItems(map: Map<String, String>, model: MainViewModel) {
     val onclck: (spec: Map<String, String>) -> Unit = {
         usr["IdDoc"] = it["IdDoc"].toString()
         usr["DocName"] = it["Name"].toString()
-        model.updateUser(usr)
+        model.updateUserInList(usr)
         model.setState("Выбрать талон")
         model.readTalonList(usr)
     }
@@ -254,7 +256,7 @@ fun talonItems(map: Map<String, String>, model: MainViewModel) {
     val onclck: (spec: Map<String, String>) -> Unit = {
         usr["IdAppointment"] = it["IdAppointment"].toString()
         usr["VisitStart"] = map["VisitStart"].toString()
-        model.updateUser(usr)
+        model.updateUserInList(usr)
         model.setState("Взять талон")
     }
 

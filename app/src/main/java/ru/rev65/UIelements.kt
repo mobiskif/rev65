@@ -1,6 +1,5 @@
 package ru.rev65
 
-import android.content.res.Resources
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,7 +21,6 @@ import androidx.compose.ui.unit.dp
 
 val mbord = Modifier.border(0.dp, Color.LightGray, Shapes().medium)
 val mpadd = Modifier.padding(8.dp)
-val mGray = Modifier.background(color = Color.Gray, shape = Shapes().medium)
 val mWhite = Modifier.background(Color.White, shape = Shapes().medium)
 val mfw = Modifier.fillMaxWidth()
 val mf062 = Modifier.fillMaxWidth(0.62f)

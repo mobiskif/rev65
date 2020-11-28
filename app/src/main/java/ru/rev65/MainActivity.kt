@@ -28,13 +28,12 @@ class MainActivity : AppCompatActivity() {
 
         model.wait.observe(this, { setContent { UI(model) } })
         model.state.observe(this, { setContent { UI(model) } })
-        model.usrList.observe(this, { model.writeUsrList() })
+        model.usrList.observe(this, { setContent { UI(model)} })
         model.idPat.observe(this, {
-            //Log.d("jop", "$it")
             val usr = model.user as MutableMap
             usr["idPat"] = it["IdPat"].toString()
             usr["idPatSuccess"] = it["Success"].toString()
-            model.updateUser(usr)
+            model.updateUserInList(usr)
             model.readHistList(usr)
             model.readSpecList(usr)
         })

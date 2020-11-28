@@ -1,8 +1,9 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "LocalVariableName", "LocalVariableName", "LocalVariableName", "LocalVariableName", "LocalVariableName", "LocalVariableName", "LocalVariableName", "LocalVariableName",
+    "LocalVariableName", "LocalVariableName", "LocalVariableName", "LocalVariableName"
+)
 
 package ru.rev65
 
-import android.util.Log
 import org.ksoap2.SoapEnvelope
 import org.ksoap2.serialization.PropertyInfo
 import org.ksoap2.serialization.SoapObject
