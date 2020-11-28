@@ -35,7 +35,7 @@ val typography = Typography(
     body1 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 14.sp
     ),
     body2 = TextStyle(
         fontFamily = FontFamily.Default,
@@ -44,11 +44,13 @@ val typography = Typography(
     ),
     overline = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Bold,
         fontSize = 12.sp,
         color = Color.Red
     ),
 )
+
+val error = typography.overline
 
 /*
 val LightPalette = lightColors(
@@ -83,52 +85,10 @@ val DarkPalette = darkColors(
     onBackground = Color.LightGray
 )
 
-/*
-fun HexToColor(hex: String): Color {
-    var hex = hex
-    hex = hex.replace("#", "")
-    when (hex.length) {
-        6 -> return Color(
-            Integer.valueOf(hex.substring(0, 2), 16),
-            Integer.valueOf(hex.substring(2, 4), 16),
-            Integer.valueOf(hex.substring(4, 6), 16)
-        )
-        8 -> return Color(
-            Integer.valueOf(hex.substring(0, 2), 16),
-            Integer.valueOf(hex.substring(2, 4), 16),
-            Integer.valueOf(hex.substring(4, 6), 16),
-            Integer.valueOf(hex.substring(6, 8), 16)
-        )
-    }
-    return Color(0)
-}
- */
-
-val mod_padd = Modifier.padding(8.dp)
 @Composable
 fun mod_back(): Modifier {
     return Modifier
     .background(color = MaterialTheme.colors.primary, shape = shapes.medium)
-}
-
-@Composable
-fun err_info(): Modifier {
-    return Modifier
-    //.padding(8.dp)
-    //.fillMaxWidth()
-    //.wrapContentWidth(Alignment.CenterHorizontally)
-    //.background(color = MaterialTheme.colors.surface, shape = shapes.medium)
-    //.border(0.dp, Color.Red, shapes.small)
-}
-
-@Composable
-fun mod_list(): Modifier {
-    return Modifier
-        //.padding(8.dp)
-        //.fillMaxWidth()
-        //.wrapContentWidth(Alignment.CenterHorizontally)
-        //.background(color = MaterialTheme.colors.surface, shape = shapes.medium)
-        //.border(0.dp, MaterialTheme.colors.primary, shapes.small)
 }
 
 @Composable

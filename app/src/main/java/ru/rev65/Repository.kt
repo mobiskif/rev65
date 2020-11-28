@@ -52,7 +52,7 @@ class Repository {
         "iR" to "8",
         "id" to "${Math.random()}"
     )
-    private val previewList = MutableLiveData<List<Map<String, String>>>(mutableListOf(pat1, pat2, pat1))
+    private val previewList = MutableLiveData<List<Map<String, String>>>(mutableListOf(pat1, pat2))
 
     fun readUsrList(usrfile: File) {
         try {
@@ -118,7 +118,7 @@ class Repository {
             _wait.postValue(true)
             val res = Hub2().checkPat("CheckPatient", args)
             if (res.isNotEmpty()) {
-                if (res[0]["Success"].equals("true")) {
+                if (res[0]["Success"]=="true") {
                     result["IdPat"] = res[0]["IdPat"].toString()
                     result["Success"] = "true"
                 } else {

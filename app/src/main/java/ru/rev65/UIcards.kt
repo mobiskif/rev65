@@ -105,26 +105,35 @@ fun patItems(model: MainViewModel) {
     val currentState = model.getState()
     if (currentState != "Выбрать пациента") {
         Row(modifier = mGray.then(mpadd).then(mfw)) {
-            Column(mf062.clickable(onClick = {onclck(user)})) {
+            Column(mf062.clickable(onClick = { onclck(user) })) {
                 Text("${user["F"]} ${user["I"]} ${user["O"]}")
                 Text("${user["D"]} ")
             }
             Column {
-                if (state=="Выбрать клинику") Text(trimNull(user["R"]))
-                if (state=="Выбрать специальность") Text(trimNull(user["LPUShortName"]))
-                if (state=="Выбрать специальность") Text("№: "+trimNull(user["idPat"]))
-                if (state=="Отложенные талоны") Text(trimNull(user["LPUShortName"]))
-                if (state=="Отложенные талоны") Text("№: "+trimNull(user["idPat"]))
-                if (state=="Выбрать врача") Text(trimNull(user["NameSpesiality"]))
-                if (state=="Выбрать талон") Text(trimNull(user["DocName"]))
-                if (state=="Взять талон") Text(trimNull(user["DocName"]))
-                if (state=="Отменить талон") Text(trimNull(user["NameSpesiality"]))
-                //if (model.getState() != "Выбрать клинику" && wait) CircularProgressIndicator()
+                if (state == "Выбрать клинику") Text(trimNull(user["R"]))
+                else if (user["idPatSuccess"] == "true") {
+                    if (state == "Выбрать специальность") {
+                        Text(trimNull(user["LPUShortName"]))
+                        Text("№: " + trimNull(user["idPat"]))
+                    }
+                    if (state == "Отложенные талоны") {
+                        Text(trimNull(user["LPUShortName"]))
+                        Text("№: " + trimNull(user["idPat"]))
+                    }
+                    if (state == "Выбрать врача") Text(trimNull(user["NameSpesiality"]))
+                    if (state == "Выбрать талон") Text(trimNull(user["DocName"]))
+                    if (state == "Взять талон") Text(trimNull(user["DocName"]))
+                    if (state == "Отменить талон") Text(trimNull(user["NameSpesiality"]))
+                } else {
+                    Text(style = error, text = trimNull(user["idPat"]))
+                }
             }
+            //if (model.getState() != "Выбрать клинику" && wait) CircularProgressIndicator()
         }
-        Spacer(modifier = Modifier.height(8.dp))
     }
+    Spacer(modifier = Modifier.height(8.dp))
 }
+
 
 @Composable
 fun usrItems(map: Map<String, String>, model: MainViewModel) {
@@ -194,8 +203,7 @@ fun specItems(map: Map<String, String>, model: MainViewModel) {
     }
     if ("${map["Success"]}" == "true") {
         //
-    }
-    else {
+    } else {
         Row(modifier = mbord.then(mpadd).then(mfw)) {
             Column(mf062.clickable(onClick = { onclck(map) })) {
                 Text("${map["NameSpesiality"]}")
@@ -219,22 +227,21 @@ fun docItems(map: Map<String, String>, model: MainViewModel) {
         model.readTalonList(usr)
     }
 
-    if ("${map["Success"]}"=="true") {
+    if ("${map["Success"]}" == "true") {
         //
-    }
-    else {
-    Row(modifier = mbord.then(mpadd).then(mfw)) {
-        Column(mf062.clickable(onClick = { onclck(map) })) {
-            //doc.forEach() { Text("${it.key} ${it.value}") }
-            Text(trimNull(map["Name"]))
-            Text(trimNull(map["AriaNumber"]))
+    } else {
+        Row(modifier = mbord.then(mpadd).then(mfw)) {
+            Column(mf062.clickable(onClick = { onclck(map) })) {
+                //doc.forEach() { Text("${it.key} ${it.value}") }
+                Text(trimNull(map["Name"]))
+                Text(trimNull(map["AriaNumber"]))
+            }
+            Column {
+                Text("Талонов: " + trimNull(map["CountFreeParticipantIE"]))
+                //Text("Резерв: " + trimNull(map["CountFreeTicket"]))
+            }
         }
-        Column {
-            Text("Талонов: " + trimNull(map["CountFreeParticipantIE"]))
-            //Text("Резерв: " + trimNull(map["CountFreeTicket"]))
-        }
-    }
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
@@ -248,7 +255,7 @@ fun talonItems(map: Map<String, String>, model: MainViewModel) {
         model.setState("Взять талон")
     }
 
-    if (map["IdAppointment"]!="null") {
+    if (map["IdAppointment"] != "null") {
         Row(modifier = mbord.then(mpadd).then(mfw)) {
             Column(mf062.clickable(onClick = { onclck(map) })) {
                 Text(trimNull("Талон №: " + map["IdAppointment"]))
@@ -268,7 +275,7 @@ fun talonItems(map: Map<String, String>, model: MainViewModel) {
 fun talonItemsEdit(model: MainViewModel) {
     val usr = model.user as MutableMap
     val clkgettalon: (spec: Map<String, String>) -> Unit = {
-        Log.d("jop","get $it")
+        Log.d("jop", "get $it")
         model.getTalon(usr)
         model.setState("Выбрать специальность")
     }
@@ -279,21 +286,20 @@ fun talonItemsEdit(model: MainViewModel) {
 
     Row(modifier = mbord.then(mpadd).then(mfw)) {
         Column(mf062) {
-            Text(trimNull("Талон №: "+usr["IdAppointment"]))
+            Text(trimNull("Талон №: " + usr["IdAppointment"]))
             Spacer(modifier = Modifier.height(8.dp))
         }
         Column {
             val dat = usr["VisitStart"]?.split("T")?.get(0)
-            val tim = usr["VisitStart"]?.split("T")?.get(1)?.substring(0,5)
+            val tim = usr["VisitStart"]?.split("T")?.get(1)?.substring(0, 5)
             Text(trimNull(dat))
             Text(trimNull(tim))
         }
     }
     Row(modifier = mpadd.then(mfw)) {
-        if (model.getState()=="Взять талон") {
+        if (model.getState() == "Взять талон") {
             Button(onClick = { clkgettalon(usr) }) { Text("Взять талон?") }
-        }
-        else if (model.getState()=="Отменить талон") {
+        } else if (model.getState() == "Отменить талон") {
             Button(onClick = { clkdeltalon(usr) }) { Text("Отменить талон?") }
         }
         TextButton(onClick = { model.setState("Выбрать специальность") }) { Text("Нет") }
@@ -310,7 +316,7 @@ fun histItems(map: Map<String, String>, model: MainViewModel) {
         model.setState("Отменить талон")
     }
 
-    if(!map["IdAppointment"].isNullOrEmpty()) {
+    if (!map["IdAppointment"].isNullOrEmpty()) {
         Row(modifier = mbord.then(mpadd).then(mfw)) {
             Column(mf062.clickable(onClick = { onclck(map) })) {
                 Text(trimNull("Талон №: " + map["IdAppointment"]))

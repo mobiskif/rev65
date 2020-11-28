@@ -29,8 +29,8 @@ class Hub2 {
         try {
             androidHttpTransport.debug = true
             androidHttpTransport.call(soapACTION, envelope)
-            Log.d("jop", androidHttpTransport.requestDump)
-            Log.d("jop", androidHttpTransport.responseDump)
+            //Log.d("jop", androidHttpTransport.requestDump)
+            //Log.d("jop", androidHttpTransport.responseDump)
             //if (action.equals("CheckPatient")) Log.d("jop", androidHttpTransport.responseDump)
             val soapObj = envelope.response as SoapObject
             processObj(soapObj, PropertyInfo(), 0, list)
