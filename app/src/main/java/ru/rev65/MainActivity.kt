@@ -27,7 +27,11 @@ class MainActivity : AppCompatActivity() {
         model.usrfile = File(filesDir, "usrlist.csv")
 
         model.wait.observe(this, { setContent { UI(model) } })
-        model.state.observe(this, { setContent { UI(model) } })
+        model.state.observe(this, {
+            setContent { UI(model) }
+            if (model.getState() == "Выбрать специальность") Toast.makeText(this, "Отложенные талоны за иконкой \"Календарь\" ", Toast.LENGTH_SHORT).show()
+            if (model.getState() == "Выбрать врача" && model.user["idPatSuccess"]=="false") Toast.makeText(this, "Запись невозможна: карточки пациента нет в регистратуре!", Toast.LENGTH_LONG).show()
+        })
         model.usrList.observe(this, { setContent { UI(model)} })
         model.idPat.observe(this, {
             val usr = model.user as MutableMap

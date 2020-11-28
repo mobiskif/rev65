@@ -18,16 +18,19 @@ import androidx.compose.ui.unit.sp
 */
 
 val shapes = Shapes(
+    /*
     small = RoundedCornerShape(4.dp),
     medium = RoundedCornerShape(8.dp),
     large = RoundedCornerShape(16.dp)
+    */
 )
 
 val typography = Typography(
+    /*
     body1 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 14.sp
+        fontSize = 15.sp
     ),
     body2 = TextStyle(
         fontFamily = FontFamily.Default,
@@ -40,6 +43,7 @@ val typography = Typography(
         fontSize = 12.sp,
         color = Color.Red
     ),
+    */
 )
 
 val error = typography.overline
