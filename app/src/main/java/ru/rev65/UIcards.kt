@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.currentTextStyle
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -125,10 +124,10 @@ fun patItems(model: MainViewModel) {
                 if (state == "Выбрать клинику") {
                     Text(trimNull(user["R"]), style = typography.body2)
                     Spacer(modifier = Modifier.height(16.dp))
-                    TextButton(modifier = mbord, onClick = {
+                    TextButton(onClick = {
                         model.updatePatList(user)
                         model.setState("Мои карточки")
-                    }) { Text("Карточки", style = typography.body2) }
+                    }) { Text("...", style = typography.body2) }
                 }
                 else if (user["idPatSuccess"] == "true") {
                     if (state == "Выбрать специальность") {
@@ -208,8 +207,8 @@ fun lpuItems(map: Map<String, String>, model: MainViewModel) {
         }
         Column(Modifier.clickable(onClick = { onclck(map) }).then(mpadd)) {
             Text(text="${map["LPUShortName"]}", style = typography.body2)
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text="${map["Description"]}", style = typography.overline)
+            //Spacer(modifier = Modifier.height(16.dp))
+            //Text(text="${map["Description"]}", style = typography.overline)
         }
     }
     Spacer(modifier = Modifier.height(8.dp))
@@ -231,13 +230,13 @@ fun cardItems(map: Map<String, String>, model: MainViewModel) {
         Column(Modifier.clickable(onClick = { onclck(map) }).then(mf062).then(mpadd)) {
             //Text(text="${map["LPUFullName"]}", style = typography.body1)
             if (map["Success"]=="true") Text(text="Карточка №:", style = typography.body1)
-            Text(text="${trimNull(map["IdPat"])}", style = typography.body1)
+            Text(text= trimNull(map["IdPat"]), style = typography.body1)
         }
         Column(Modifier.clickable(onClick = { onclck(map) }).then(mpadd)) {
             Text(text="${map["LPUShortName"]}", style = typography.body2)
-            //Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             //Text(text="${map["IdLPU"]}", style = typography.overline)
-            //Text(text="${map["Description"]}", style = typography.overline)
+            Text(text="${map["Description"]}", style = typography.overline)
         }
     }
     Spacer(modifier = Modifier.height(8.dp))
