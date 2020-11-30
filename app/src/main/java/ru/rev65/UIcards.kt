@@ -2,6 +2,7 @@ package ru.rev65
 
 import android.util.Log
 import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -115,24 +116,30 @@ fun patItems(model: MainViewModel) {
     }
     val currentState = model.getState()
     if (currentState != "Выбрать пациента") {
-        Row(modifier = col.then(mfw).then(mpadd)) {
-            Column(mf062.clickable(onClick = { onclck(user) }).then(mpadd)) {
+        //Row(modifier = col.then(mfw).then(mpadd)) {
+            Row {
+/*            Column(mf062.clickable(onClick = { onclck(user) }).then(mpadd)) {
                 Text("${user["F"]} ${user["I"]} ${user["O"]}", style = typography.body1)
                 //Text("${user["D"]} ", style = typography.body1)
             }
-            Column(mpadd) {
+*/            Column(mpadd) {
+                //Text("${user["F"]} ${user["I"]} ${user["O"]}", style = typography.body1)
                 if (state == "Выбрать клинику") {
-                    Text(trimNull(user["R"]), style = typography.body2)
+                    Text("${user["F"]} ${user["I"]} ${user["O"]}", style = typography.body1)
+                    /*Text(trimNull(user["R"]), style = typography.body2)
+
                     Spacer(modifier = Modifier.height(8.dp))
                     TextButton(onClick = {
                         model.updatePatList(user)
                         model.setState("Мои карточки")
                     }) { Text("...", style = typography.body2) }
+                    */
                 }
                 else if (user["idPatSuccess"] == "true") {
                     if (state == "Выбрать специальность") {
-                        Text(trimNull(user["LPUShortName"]), style = typography.body2)
-                        Text("№: " + trimNull(user["idPat"]), style = typography.body2)
+                        Text("${user["F"]} ${user["I"]} ${user["O"]}", style = typography.body1)
+                        Text(trimNull(user["LPUShortName"] + ", карточка: " + trimNull(user["idPat"])), style = typography.body2)
+                        //Text("№: " + trimNull(user["idPat"]), style = typography.body2)
                     }
                     if (state == "Отложенные талоны") {
                         Text(trimNull(user["LPUShortName"]), style = typography.body2)
@@ -372,9 +379,11 @@ fun histItems(map: Map<String, String>, model: MainViewModel) {
         usr["IdAppointment"] = it["IdAppointment"].toString()
         model.setState("Отменить талон")
     }
+    val colr = Modifier.background(MaterialTheme.colors.secondary, shapes.medium)
+    val bcolr = Modifier .border(3.dp,MaterialTheme.colors.secondary, shapes.medium)
 
     if (!map["IdAppointment"].isNullOrEmpty()) {
-        Row(modifier = mbord.then(mpadd).then(mfw)) {
+        Row(modifier = bcolr.then(mpadd).then(mfw)) {
             Column(mf062.clickable(onClick = { onclck(map) }).then(mpadd)) {
                 //Text(trimNull("Талон №: " + map["IdAppointment"]), style = typography.body2)
                 Text(trimNull("Отложен талон к: "), style = typography.body2)
