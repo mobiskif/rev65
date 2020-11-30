@@ -118,7 +118,7 @@ fun patItems(model: MainViewModel) {
         Row(modifier = col.then(mfw).then(mpadd)) {
             Column(mf062.clickable(onClick = { onclck(user) }).then(mpadd)) {
                 Text("${user["F"]} ${user["I"]} ${user["O"]}", style = typography.body1)
-                Text("${user["D"]} ", style = typography.body1)
+                //Text("${user["D"]} ", style = typography.body1)
             }
             Column(mpadd) {
                 if (state == "Выбрать клинику") {
@@ -370,7 +370,8 @@ fun histItems(map: Map<String, String>, model: MainViewModel) {
     if (!map["IdAppointment"].isNullOrEmpty()) {
         Row(modifier = mbord.then(mpadd).then(mfw)) {
             Column(mf062.clickable(onClick = { onclck(map) }).then(mpadd)) {
-                Text(trimNull("Талон №: " + map["IdAppointment"]), style = typography.body2)
+                //Text(trimNull("Талон №: " + map["IdAppointment"]), style = typography.body2)
+                Text(trimNull("Отложен талон к: "), style = typography.body2)
                 Text(trimNull(map["Name"]), style = typography.body2)
                 Text(trimNull(map["NameSpesiality"]), style = typography.body2)
             }
@@ -382,5 +383,6 @@ fun histItems(map: Map<String, String>, model: MainViewModel) {
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.width(8.dp))
     }
 }

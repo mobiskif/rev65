@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         model.wait.observe(this, { setContent { UI(model) } })
         model.state.observe(this, {
             setContent { UI(model) }
-            if (model.getState() == "Выбрать специальность") Toast.makeText(this, "Отложенные талоны за иконкой \"Календарь\" ", Toast.LENGTH_SHORT).show()
+            //if (model.getState() == "Выбрать специальность") Toast.makeText(this, "Отложенные талоны за иконкой \"Календарь\" ", Toast.LENGTH_SHORT).show()
             if (model.getState() == "Выбрать врача" && model.user["idPatSuccess"]=="false") Toast.makeText(this, "Запись невозможна: карточки пациента нет в регистратуре!", Toast.LENGTH_LONG).show()
         })
         model.usrList.observe(this, { setContent { UI(model)} })
@@ -118,6 +119,8 @@ fun UI(model: MainViewModel) {
                         LazyColumnFor(pats) { cardItems(it, model) }
                     }
                     "Выбрать специальность" -> {
+                        LazyRowFor(hist) { histItems(it, model) }
+                        Spacer(modifier = Modifier.height(8.dp))
                         patItems(model)
                         LazyColumnFor(specs) { specItems(it, model) }
                     }
