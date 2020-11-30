@@ -123,7 +123,7 @@ fun patItems(model: MainViewModel) {
             Column(mpadd) {
                 if (state == "Выбрать клинику") {
                     Text(trimNull(user["R"]), style = typography.body2)
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     TextButton(onClick = {
                         model.updatePatList(user)
                         model.setState("Мои карточки")
@@ -140,8 +140,14 @@ fun patItems(model: MainViewModel) {
                     }
                     if (state == "Выбрать врача") Text(trimNull(user["NameSpesiality"]), style = typography.body2)
                     if (state == "Мои карточки") Text(trimNull(user["R"]), style = typography.body2)
-                    if (state == "Выбрать талон") Text(trimNull(user["DocName"]), style = typography.body2)
-                    if (state == "Взять талон") Text(trimNull(user["DocName"]), style = typography.body2)
+                    if (state == "Выбрать талон") {
+                        Text(trimNull(user["NameSpesiality"]), style = typography.body2)
+                        Text(trimNull(user["DocName"]), style = typography.body2)
+                    }
+                    if (state == "Взять талон") {
+                        Text(trimNull(user["NameSpesiality"]), style = typography.body2)
+                        Text(trimNull(user["DocName"]), style = typography.body2)
+                    }
                     if (state == "Отменить талон") Text(trimNull(user["NameSpesiality"]), style = typography.body2)
                 } else {
                     Text(trimNull(user["idPat"]), style = typography.overline)
