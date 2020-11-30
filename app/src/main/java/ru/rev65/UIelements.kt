@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
@@ -24,6 +25,13 @@ val mpadd = Modifier.padding(8.dp)
 val mWhite = Modifier.background(Color.White, shape = Shapes().medium)
 val mfw = Modifier.fillMaxWidth()
 val mf062 = Modifier.fillMaxWidth(0.62f)
+
+@Composable
+fun myTopBar(model: MainViewModel) {
+    val mod = Modifier.background(MaterialTheme.colors.primary).padding(16.dp).fillMaxWidth()
+    val stl = MaterialTheme.typography.h6
+    Text(modifier = mod, text = "${model.getState()}", style = stl, color = MaterialTheme.colors.contentColorFor(MaterialTheme.colors.primary))
+}
 
 @Composable
 fun myColumn(

@@ -95,7 +95,7 @@ fun UI(model: MainViewModel) {
     val wait = model.wait.value == true
 
     myTheme {
-        Scaffold(floatingActionButton = { myFab(model) }) {
+        Scaffold(floatingActionButton = { myFab(model) }, topBar = { myTopBar(model) }) {
             Column(modifier = mpadd) {
                 if (wait) {
                     LinearProgressIndicator(mfw)
@@ -109,19 +109,19 @@ fun UI(model: MainViewModel) {
                         usrItemsEdit(model)
                     }
                     "Выбрать пациента" -> {
-                        Text(model.getState())
+                        //Text(model.getState())
                         Spacer(modifier = Modifier.height(8.dp))
                         LazyColumnFor(usrs) { usrItems(it, model) }
                     }
                     "Выбрать клинику" -> {
                         patItems(model)
-                        Text(model.getState())
+                        //Text(model.getState())
                         Spacer(modifier = Modifier.height(8.dp))
                         LazyColumnFor(lpus) { lpuItems(it, model) }
                     }
                     "Мои карточки" -> {
                         patItems(model)
-                        Text(model.getState())
+                        //Text(model.getState())
                         Spacer(modifier = Modifier.height(8.dp))
                         LazyColumnFor(pats) { cardItems(it, model) }
                     }
@@ -131,37 +131,37 @@ fun UI(model: MainViewModel) {
                             Spacer(modifier = Modifier.height(8.dp))
                         }
                         patItems(model)
-                        Text(model.getState())
+                        //Text(model.getState())
                         Spacer(modifier = Modifier.height(8.dp))
                         LazyColumnFor(specs) { specItems(it, model) }
                     }
                     "Выбрать врача" -> {
                         patItems(model)
-                        Text(model.getState())
+                        //Text(model.getState())
                         Spacer(modifier = Modifier.height(8.dp))
                         LazyColumnFor(docs) { docItems(it, model) }
                     }
                     "Выбрать талон" -> {
                         patItems(model)
-                        Text(model.getState())
+                        //Text(model.getState())
                         Spacer(modifier = Modifier.height(8.dp))
                         LazyColumnFor(talons) { talonItems(it, model) }
                     }
                     "Отложенные талоны" -> {
                         patItems(model)
-                        Text(model.getState())
+                        //Text(model.getState())
                         Spacer(modifier = Modifier.height(8.dp))
                         LazyColumnFor(hist) { histItems(it, model) }
                     }
                     "Взять талон" -> {
                         patItems(model)
-                        Text(model.getState())
+                        //Text(model.getState())
                         Spacer(modifier = Modifier.height(8.dp))
                         talonItemsEdit(model)
                     }
                     "Отменить талон" -> {
                         patItems(model)
-                        Text(model.getState())
+                        //Text(model.getState())
                         Spacer(modifier = Modifier.height(8.dp))
                         talonItemsEdit(model)
                     }
