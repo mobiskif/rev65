@@ -119,7 +119,7 @@ fun patItems(model: MainViewModel) {
                     "Выбрать специальность" -> Text(trimNull(user["LPUShortName"]) + " карточка " + trimNull(user["idPat"]))
                     "Отложенные талоны" -> Text(trimNull(user["LPUShortName"]) + " карточка " + trimNull(user["idPat"]))
                     "Выбрать врача" -> Text(trimNull(user["NameSpesiality"]))
-                    "Выбрать талон" -> Text(trimNull(user["NameSpesiality"]))
+                    //"Выбрать талон" -> Text(trimNull(user["NameSpesiality"]))
                     "Мои карточки" -> Text(trimNull(user["R"]))
                 }
             else Text(trimNull(user["idPat"]), color = Color.Red)
@@ -271,29 +271,66 @@ fun docItems(map: Map<String, String>, model: MainViewModel) {
 }
 
 @Composable
-fun talonItems(map: Map<String, String>, model: MainViewModel) {
+fun histItems(map: Map<String, String>, model: MainViewModel) {
     val usr = model.user as MutableMap
     val onclck: (spec: Map<String, String>) -> Unit = {
         usr["IdAppointment"] = it["IdAppointment"].toString()
-        usr["VisitStart"] = map["VisitStart"].toString()
-        model.updateUserInList(usr)
-        model.setState("Взять талон")
+        usr["NameSpesiality"] = it["NameSpesiality"].toString()
+        usr["DocName"] = it["Name"].toString()
+        usr["VisitStart"] = it["VisitStart"].toString()
+        model.user = usr
+        model.setState("Отменить талон")
     }
 
-    if (map["IdAppointment"] != "null") {
-        Row(modifier = mbord.then(mpadd).then(mfw)) {
+    val bcolr = Modifier.border(3.dp, MaterialTheme.colors.secondary, shapes.medium)
+    if (!map["IdAppointment"].isNullOrEmpty()) {
+        Row(modifier = bcolr.then(mpadd).then(mfw)) {
             Column(mf062.clickable(onClick = { onclck(map) }).then(mpadd)) {
-                Text(trimNull("Талон №: " + map["IdAppointment"]), style = typography.body2)
+                Text(trimNull(map["NameSpesiality"]))
+                //Text(trimNull(map["Name"]))
             }
             Column(mpadd) {
                 val dat = map["VisitStart"]?.split("T")?.get(0)
                 val tim = map["VisitStart"]?.split("T")?.get(1)?.substring(0, 5)
-                Text(trimNull(dat), style = typography.body1)
-                Text(trimNull(tim), style = typography.body1)
+                Text(trimNull(dat))
+                Text(trimNull(tim))
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.width(8.dp))
     }
+    Spacer(modifier = Modifier.height(8.dp))
+}
+
+@Composable
+fun talonItems(map: Map<String, String>, model: MainViewModel) {
+    val usr = model.user as MutableMap
+    val onclck: (spec: Map<String, String>) -> Unit = {
+        usr["IdAppointment"] = it["IdAppointment"].toString()
+        //usr["NameSpesiality"] = it["NameSpesiality"].toString()
+        //usr["DocName"] = it["Name"].toString()
+        usr["VisitStart"] = it["VisitStart"].toString()
+        model.user = usr
+        model.setState("Взять талон")
+    }
+    val bcolr = Modifier.border(3.dp, MaterialTheme.colors.secondary, shapes.medium)
+    if (!map["IdAppointment"].isNullOrEmpty()) {
+        Row(modifier = bcolr.then(mpadd)) {
+            Column(mf062.clickable(onClick = { onclck(map) }).then(mpadd)) {
+                Text(trimNull(usr["NameSpesiality"]))
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(trimNull(usr["DocName"]), style = typography.body2)
+            }
+            Column(mpadd) {
+                val dat = map["VisitStart"]?.split("T")?.get(0)
+                val tim = map["VisitStart"]?.split("T")?.get(1)?.substring(0, 5)
+                Text(trimNull(dat))
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(trimNull(tim))
+            }
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+    }
+    Spacer(modifier = Modifier.height(8.dp))
 }
 
 @Composable
@@ -335,35 +372,4 @@ fun talonItemsEdit(model: MainViewModel) {
         TextButton(onClick = { model.setState("Выбрать специальность") }) { Text("Нет") }
     }
     Spacer(modifier = Modifier.height(8.dp))
-}
-
-@Composable
-fun histItems(map: Map<String, String>, model: MainViewModel) {
-    val usr = model.user as MutableMap
-    val onclck: (spec: Map<String, String>) -> Unit = {
-        usr["IdAppointment"] = it["IdAppointment"].toString()
-        usr["NameSpesiality"] = it["NameSpesiality"].toString()
-        usr["DocName"] = it["Name"].toString()
-        usr["VisitStart"] = it["VisitStart"].toString()
-        model.user = usr
-        model.setState("Отменить талон")
-    }
-    val bcolr = Modifier.border(3.dp, MaterialTheme.colors.secondary, shapes.medium)
-
-    if (!map["IdAppointment"].isNullOrEmpty()) {
-        Row(modifier = bcolr.then(mpadd).then(mfw)) {
-            Column(mf062.clickable(onClick = { onclck(map) }).then(mpadd)) {
-                //Text(trimNull(map["Name"]))
-                Text(trimNull(map["NameSpesiality"]))
-            }
-            Column(mpadd) {
-                val dat = map["VisitStart"]?.split("T")?.get(0)
-                val tim = map["VisitStart"]?.split("T")?.get(1)?.substring(0, 5)
-                Text(trimNull(dat))
-                Text(trimNull(tim))
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Spacer(modifier = Modifier.width(8.dp))
-    }
 }
