@@ -2,7 +2,6 @@ package ru.rev65
 
 import android.util.Log
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -111,22 +110,20 @@ fun patItems(model: MainViewModel) {
     val state = model.state.value
     val onclck: (usr: Map<String, String>) -> Unit = { model.setState("Изменить пациента") }
     val currentState = model.getState()
-    if (currentState != "Выбрать пациента") {
-        Column(Modifier.clickable(onClick = { onclck(user) }).then(mpadd)) {
-            if (state == "Выбрать клинику") Text("${user["F"]} ${user["I"]} ${user["O"]}")
-            else if (user["idPatSuccess"] == "true") {
-                if (state == "Выбрать специальность") Text(trimNull(user["LPUShortName"]) + " карточка " + trimNull(user["idPat"]))
-                if (state == "Отложенные талоны") Text(trimNull(user["LPUShortName"]) + " карточка " + trimNull(user["idPat"]))
-                if (state == "Выбрать врача") Text(trimNull(user["NameSpesiality"]))
-                if (state == "Выбрать талон") Text(trimNull(user["NameSpesiality"]) + " " + trimNull(user["DocName"]))
-                if (state == "Взять талон") Text(trimNull(user["NameSpesiality"]) + " " + trimNull(user["DocName"]))
-                if (state == "Отменить талон") Text(trimNull(user["NameSpesiality"]) + " " + trimNull(user["DocName"]))
-                if (state == "Мои карточки") Text(trimNull(user["R"]))
-            }
+    Column(Modifier.clickable(onClick = { onclck(user) })) {
+        if (currentState != "Выбрать пациента")
+            if (state == "Выбрать клинику") Text("${user["F"]} ${user["I"]} ${user["O"]} ${user["D"]}")
+            else if (user["idPatSuccess"] == "true")
+                when (model.getState()) {
+                    "Выбрать клинику" -> Text("${user["F"]} ${user["I"]} ${user["O"]} ${user["D"]}")
+                    "Выбрать специальность" -> Text(trimNull(user["LPUShortName"]) + " карточка " + trimNull(user["idPat"]))
+                    "Отложенные талоны" -> Text(trimNull(user["LPUShortName"]) + " карточка " + trimNull(user["idPat"]))
+                    "Выбрать врача" -> Text(trimNull(user["NameSpesiality"]))
+                    "Выбрать талон" -> Text(trimNull(user["NameSpesiality"]))
+                    "Мои карточки" -> Text(trimNull(user["R"]))
+                }
             else Text(trimNull(user["idPat"]), color = Color.Red)
-        }
     }
-    Spacer(modifier = Modifier.height(8.dp))
 }
 
 
@@ -172,9 +169,12 @@ fun lpuItems(map: Map<String, String>, model: MainViewModel) {
     val onclck: (lpu: Map<String, String>) -> Unit = {
         usr["IdLpu"] = it["IdLPU"].toString()
         usr["LPUShortName"] = it["LPUShortName"].toString()
+
+        /********** мега-важно *******/
         usr["IdPat"] = model.checkPat(usr).toString()
+        /*****************************/
+
         model.user = usr
-        //model.readHistList(usr)
         model.setState("Выбрать специальность")
     }
     Row(modifier = mbord.then(mpadd).then(mfw)) {
@@ -183,8 +183,6 @@ fun lpuItems(map: Map<String, String>, model: MainViewModel) {
         }
         Column(Modifier.clickable(onClick = { onclck(map) }).then(mpadd)) {
             Text(text = "${map["LPUShortName"]}", style = typography.body2)
-            //Spacer(modifier = Modifier.height(16.dp))
-            //Text(text="${map["Description"]}", style = typography.overline)
         }
     }
     Spacer(modifier = Modifier.height(8.dp))
@@ -310,24 +308,29 @@ fun talonItemsEdit(model: MainViewModel) {
         model.deleteTalon(usr)
         model.setState("Выбрать специальность")
     }
+    val bcolr = Modifier.border(3.dp, MaterialTheme.colors.secondary, shapes.medium)
 
-    Row(modifier = mbord.then(mpadd).then(mfw)) {
+    Row(modifier = bcolr.then(mpadd).then(mfw)) {
         Column(mf062.then(mpadd)) {
-            Text(trimNull("Талон №: " + usr["IdAppointment"]), style = typography.body2)
+            //Text(trimNull("№ " + usr["IdAppointment"]))
+            Text(trimNull(usr["NameSpesiality"]))
             Spacer(modifier = Modifier.height(8.dp))
+            Text(trimNull(usr["DocName"]), style = typography.body2)
         }
         Column(mpadd) {
             val dat = usr["VisitStart"]?.split("T")?.get(0)
             val tim = usr["VisitStart"]?.split("T")?.get(1)?.substring(0, 5)
-            Text(trimNull(dat), style = typography.body1)
-            Text(trimNull(tim), style = typography.body1)
+            Text(trimNull(dat))
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(trimNull(tim))
         }
     }
+    Spacer(modifier = Modifier.height(8.dp))
     Row(modifier = mpadd.then(mfw)) {
         if (model.getState() == "Взять талон") {
-            Button(onClick = { clkgettalon(usr) }) { Text("Взять талон?") }
+            Button(onClick = { clkgettalon(usr) }) { Text("Взять талон") }
         } else if (model.getState() == "Отменить талон") {
-            Button(onClick = { clkdeltalon(usr) }) { Text("Отменить талон?") }
+            Button(onClick = { clkdeltalon(usr) }) { Text("Отменить талон") }
         }
         TextButton(onClick = { model.setState("Выбрать специальность") }) { Text("Нет") }
     }
@@ -338,26 +341,26 @@ fun talonItemsEdit(model: MainViewModel) {
 fun histItems(map: Map<String, String>, model: MainViewModel) {
     val usr = model.user as MutableMap
     val onclck: (spec: Map<String, String>) -> Unit = {
-        //model.deleteTalon(it)
         usr["IdAppointment"] = it["IdAppointment"].toString()
+        usr["NameSpesiality"] = it["NameSpesiality"].toString()
+        usr["DocName"] = it["Name"].toString()
+        usr["VisitStart"] = it["VisitStart"].toString()
+        model.user = usr
         model.setState("Отменить талон")
     }
-    val colr = Modifier.background(MaterialTheme.colors.secondary, shapes.medium)
     val bcolr = Modifier.border(3.dp, MaterialTheme.colors.secondary, shapes.medium)
 
     if (!map["IdAppointment"].isNullOrEmpty()) {
         Row(modifier = bcolr.then(mpadd).then(mfw)) {
             Column(mf062.clickable(onClick = { onclck(map) }).then(mpadd)) {
-                //Text(trimNull("Талон №: " + map["IdAppointment"]), style = typography.body2)
-                Text(trimNull("Отложен талон к: "), style = typography.body2)
-                Text(trimNull(map["Name"]), style = typography.body2)
-                Text(trimNull(map["NameSpesiality"]), style = typography.body2)
+                //Text(trimNull(map["Name"]))
+                Text(trimNull(map["NameSpesiality"]))
             }
             Column(mpadd) {
                 val dat = map["VisitStart"]?.split("T")?.get(0)
                 val tim = map["VisitStart"]?.split("T")?.get(1)?.substring(0, 5)
-                Text(trimNull(dat), style = typography.body1)
-                Text(trimNull(tim), style = typography.body1)
+                Text(trimNull(dat))
+                Text(trimNull(tim))
             }
         }
         Spacer(modifier = Modifier.height(8.dp))

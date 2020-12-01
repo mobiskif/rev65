@@ -93,6 +93,7 @@ fun UI(model: MainViewModel) {
         Scaffold(floatingActionButton = { myFab(model) }, topBar = { myTopBar(model) }) {
             Column(modifier = mpadd) {
                 patItems(model)
+                Spacer(modifier = Modifier.height(8.dp))
                 if (wait) { LinearProgressIndicator(mfw); Spacer(modifier = Modifier.height(8.dp)) }
                 when (model.getState()) {
                     "Изменить пациента" -> usrItemsEdit(model)
