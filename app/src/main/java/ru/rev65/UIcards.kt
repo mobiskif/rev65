@@ -47,25 +47,25 @@ fun usrItemsEdit(model: MainViewModel) {
             Column {
                 OutlinedTextField(
                     value = fF.value,
-                    textStyle = TextStyle(color=MaterialTheme.colors.onSurface),
+                    textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
                     onValueChange = { fF.value = it },
                     label = { Text("Фамилия") }//, modifier = Modifier.padding(0.dp, 8.dp)
                 )
                 OutlinedTextField(
                     value = iI.value,
-                    textStyle = TextStyle(color=MaterialTheme.colors.onSurface),
+                    textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
                     onValueChange = { iI.value = it },
                     label = { Text("Имя") }//, modifier = Modifier.padding(0.dp, 8.dp)
                 )
                 OutlinedTextField(
                     value = oO.value,
-                    textStyle = TextStyle(color=MaterialTheme.colors.onSurface),
+                    textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
                     onValueChange = { oO.value = it },
                     label = { Text("Отчество") }//, modifier = Modifier.padding(0.dp, 8.dp)
                 )
                 OutlinedTextField(
                     value = dD.value,
-                    textStyle = TextStyle(color=MaterialTheme.colors.onSurface),
+                    textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
                     onValueChange = { dD.value = it },
                     label = { Text("Дата рождения") }, //modifier = Modifier.padding(0.dp, 8.dp),
                     placeholder = { Text(text = "1986-04-26") }
@@ -95,8 +95,7 @@ fun usrItemsEdit(model: MainViewModel) {
                         if (model.getState() == "Добавить пациента") {
                             usr["id"] = "${Math.random()}"
                             model.createUser(usr)
-                        }
-                        else model.updateUserInList(usr)
+                        } else model.updateUserInList(usr)
                         model.setState("Выбрать пациента")
                     }) { Text("Сохранить") }
                 }
@@ -110,57 +109,44 @@ fun usrItemsEdit(model: MainViewModel) {
 fun patItems(model: MainViewModel) {
     val user = model.user
     val state = model.state.value
-    val col = Modifier.border(3.dp, color =  MaterialTheme.colors.primary, shape = Shapes().medium)
     val onclck: (usr: Map<String, String>) -> Unit = {
         model.setState("Изменить пациента")
     }
     val currentState = model.getState()
     if (currentState != "Выбрать пациента") {
-        //Row(modifier = col.then(mfw).then(mpadd)) {
-            Row {
-/*            Column(mf062.clickable(onClick = { onclck(user) }).then(mpadd)) {
-                Text("${user["F"]} ${user["I"]} ${user["O"]}", style = typography.body1)
-                //Text("${user["D"]} ", style = typography.body1)
-            }
-*/            Column(mpadd) {
-                //Text("${user["F"]} ${user["I"]} ${user["O"]}", style = typography.body1)
-                if (state == "Выбрать клинику") {
-                    Text("${user["F"]} ${user["I"]} ${user["O"]}", style = typography.body1)
-                    /*Text(trimNull(user["R"]), style = typography.body2)
-
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TextButton(onClick = {
-                        model.updatePatList(user)
-                        model.setState("Мои карточки")
-                    }) { Text("...", style = typography.body2) }
-                    */
+        Column(Modifier.clickable(onClick = { onclck(user) }).then(mpadd)) {
+            if (state == "Выбрать клинику") {
+                Text("${user["F"]} ${user["I"]} ${user["O"]}")
+                /*
+                Spacer(modifier = Modifier.height(8.dp))
+                TextButton(onClick = {
+                    model.updatePatList(user)
+                    model.setState("Мои карточки")
+                }) { Text("...", style = typography.body2) }
+                */
+            } else if (user["idPatSuccess"] == "true") {
+                if (state == "Выбрать специальность") {
+                    Text("${user["F"]} ${user["I"]} ${user["O"]}")
+                    Text(trimNull(user["LPUShortName"]) + ", карточка: " + trimNull(user["idPat"]))
                 }
-                else if (user["idPatSuccess"] == "true") {
-                    if (state == "Выбрать специальность") {
-                        Text("${user["F"]} ${user["I"]} ${user["O"]}", style = typography.body1)
-                        Text(trimNull(user["LPUShortName"] + ", карточка: " + trimNull(user["idPat"])), style = typography.body2)
-                        //Text("№: " + trimNull(user["idPat"]), style = typography.body2)
-                    }
-                    if (state == "Отложенные талоны") {
-                        Text(trimNull(user["LPUShortName"]), style = typography.body2)
-                        Text("№: " + trimNull(user["idPat"]), style = typography.body2)
-                    }
-                    if (state == "Выбрать врача") Text(trimNull(user["NameSpesiality"]), style = typography.body2)
-                    if (state == "Мои карточки") Text(trimNull(user["R"]), style = typography.body2)
-                    if (state == "Выбрать талон") {
-                        Text(trimNull(user["NameSpesiality"]), style = typography.body2)
-                        Text(trimNull(user["DocName"]), style = typography.body2)
-                    }
-                    if (state == "Взять талон") {
-                        Text(trimNull(user["NameSpesiality"]), style = typography.body2)
-                        Text(trimNull(user["DocName"]), style = typography.body2)
-                    }
-                    if (state == "Отменить талон") Text(trimNull(user["NameSpesiality"]), style = typography.body2)
-                } else {
-                    Text(trimNull(user["idPat"]), style = typography.overline)
+                if (state == "Отложенные талоны") {
+                    Text(trimNull(user["LPUShortName"]))
+                    Text("№: " + trimNull(user["idPat"]))
                 }
+                if (state == "Выбрать врача") Text(trimNull(user["NameSpesiality"]))
+                if (state == "Мои карточки") Text(trimNull(user["R"]))
+                if (state == "Выбрать талон") {
+                    Text(trimNull(user["NameSpesiality"]))
+                    Text(trimNull(user["DocName"]))
+                }
+                if (state == "Взять талон") {
+                    Text(trimNull(user["NameSpesiality"]))
+                    Text(trimNull(user["DocName"]))
+                }
+                if (state == "Отменить талон") Text(trimNull(user["NameSpesiality"]))
+            } else {
+                Text(trimNull(user["idPat"]), color = Color.Red)
             }
-            //if (model.getState() != "Выбрать клинику" && wait) CircularProgressIndicator()
         }
     }
     Spacer(modifier = Modifier.height(8.dp))
@@ -216,10 +202,10 @@ fun lpuItems(map: Map<String, String>, model: MainViewModel) {
     }
     Row(modifier = mbord.then(mpadd).then(mfw)) {
         Column(Modifier.clickable(onClick = { onclck(map) }).then(mf062).then(mpadd)) {
-            Text(text="${map["LPUFullName"]}", style = typography.body1)
+            Text(text = "${map["LPUFullName"]}", style = typography.body1)
         }
         Column(Modifier.clickable(onClick = { onclck(map) }).then(mpadd)) {
-            Text(text="${map["LPUShortName"]}", style = typography.body2)
+            Text(text = "${map["LPUShortName"]}", style = typography.body2)
             //Spacer(modifier = Modifier.height(16.dp))
             //Text(text="${map["Description"]}", style = typography.overline)
         }
@@ -242,14 +228,14 @@ fun cardItems(map: Map<String, String>, model: MainViewModel) {
     Row(modifier = mbord.then(mpadd).then(mfw)) {
         Column(Modifier.clickable(onClick = { onclck(map) }).then(mf062).then(mpadd)) {
             //Text(text="${map["LPUFullName"]}", style = typography.body1)
-            if (map["Success"]=="true") Text(text="Карточка №:", style = typography.body1)
-            Text(text= trimNull(map["IdPat"]), style = typography.body1)
+            if (map["Success"] == "true") Text(text = "Карточка №:", style = typography.body1)
+            Text(text = trimNull(map["IdPat"]), style = typography.body1)
         }
         Column(Modifier.clickable(onClick = { onclck(map) }).then(mpadd)) {
-            Text(text="${map["LPUShortName"]}", style = typography.body2)
+            Text(text = "${map["LPUShortName"]}", style = typography.body2)
             Spacer(modifier = Modifier.height(16.dp))
             //Text(text="${map["IdLPU"]}", style = typography.overline)
-            Text(text="${map["Description"]}", style = typography.overline)
+            Text(text = "${map["Description"]}", style = typography.overline)
         }
     }
     Spacer(modifier = Modifier.height(8.dp))
@@ -380,7 +366,7 @@ fun histItems(map: Map<String, String>, model: MainViewModel) {
         model.setState("Отменить талон")
     }
     val colr = Modifier.background(MaterialTheme.colors.secondary, shapes.medium)
-    val bcolr = Modifier .border(3.dp,MaterialTheme.colors.secondary, shapes.medium)
+    val bcolr = Modifier.border(3.dp, MaterialTheme.colors.secondary, shapes.medium)
 
     if (!map["IdAppointment"].isNullOrEmpty()) {
         Row(modifier = bcolr.then(mpadd).then(mfw)) {
