@@ -1,7 +1,6 @@
 package ru.rev65
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
@@ -30,10 +28,9 @@ class MainActivity : AppCompatActivity() {
         model.wait.observe(this, { setContent { UI(model) } })
         model.state.observe(this, {
             setContent { UI(model) }
-            //if (model.getState() == "Выбрать специальность") Toast.makeText(this, "Отложенные талоны за иконкой \"Календарь\" ", Toast.LENGTH_SHORT).show()
-            if (model.getState() == "Выбрать врача" && model.user["idPatSuccess"]=="false") Toast.makeText(this, "Запись невозможна: карточки пациента нет в регистратуре!", Toast.LENGTH_LONG).show()
+            if (model.getState() == "Выбрать врача" && model.user["idPatSuccess"] == "false") Toast.makeText(this, "Запись невозможна: карточки пациента нет в регистратуре!", Toast.LENGTH_LONG).show()
         })
-        model.usrList.observe(this, { setContent { UI(model)} })
+        model.usrList.observe(this, { setContent { UI(model) } })
         model.idPat.observe(this, {
             val usr = model.user as MutableMap
             usr["idPat"] = it["IdPat"].toString()
@@ -48,8 +45,7 @@ class MainActivity : AppCompatActivity() {
                 else Toast.makeText(this, "Талон отменен!", Toast.LENGTH_LONG).show()
                 model.readHistList(model.user)
                 model.setState("Отложенные талоны")
-            }
-            else Toast.makeText(this, "Действие не выполнено, отказ!", Toast.LENGTH_LONG).show()
+            } else Toast.makeText(this, "Действие не выполнено, отказано регистратурой!", Toast.LENGTH_LONG).show()
         })
     }
 
@@ -80,7 +76,6 @@ class MainActivity : AppCompatActivity() {
         }
         model.setState(state)
     }
-
 }
 
 @Composable
@@ -98,74 +93,23 @@ fun UI(model: MainViewModel) {
         Scaffold(floatingActionButton = { myFab(model) }, topBar = { myTopBar(model) }) {
             Column(modifier = mpadd) {
                 patItems(model)
-                if (wait) {
-                    LinearProgressIndicator(mfw)
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
+                if (wait) { LinearProgressIndicator(mfw); Spacer(modifier = Modifier.height(8.dp)) }
                 when (model.getState()) {
-                    "Изменить пациента" -> {
-                        usrItemsEdit(model)
-                    }
-                    "Добавить пациента" -> {
-                        usrItemsEdit(model)
-                    }
-                    "Выбрать пациента" -> {
-                        //Text(model.getState())
-                        //Spacer(modifier = Modifier.height(8.dp))
-                        LazyColumnFor(usrs) { usrItems(it, model) }
-                    }
-                    "Выбрать клинику" -> {
-                        //patItems(model)
-                        //Text(model.getState())
-                        //Spacer(modifier = Modifier.height(8.dp))
-                        LazyColumnFor(lpus) { lpuItems(it, model) }
-                    }
-                    "Мои карточки" -> {
-                        //patItems(model)
-                        //Text(model.getState())
-                        //Spacer(modifier = Modifier.height(8.dp))
-                        LazyColumnFor(pats) { cardItems(it, model) }
-                    }
+                    "Изменить пациента" -> usrItemsEdit(model)
+                    "Добавить пациента" -> usrItemsEdit(model)
+                    "Выбрать пациента" -> LazyColumnFor(usrs) { usrItems(it, model) }
+                    "Выбрать клинику" -> LazyColumnFor(lpus) { lpuItems(it, model) }
+                    "Мои карточки" -> LazyColumnFor(pats) { cardItems(it, model) }
                     "Выбрать специальность" -> {
-                        //patItems(model)
-                        if (hist.size>0) {
-                            LazyRowFor(hist) { histItems(it, model) }
-                            Spacer(modifier = Modifier.height(8.dp))
-                        }
-                        //Text(model.getState())
-                        //Spacer(modifier = Modifier.height(8.dp))
+                        LazyRowFor(hist) { histItems(it, model) }
+                        Spacer(modifier = Modifier.height(8.dp))
                         LazyColumnFor(specs) { specItems(it, model) }
                     }
-                    "Выбрать врача" -> {
-                        //patItems(model)
-                        //Text(model.getState())
-                        //Spacer(modifier = Modifier.height(8.dp))
-                        LazyColumnFor(docs) { docItems(it, model) }
-                    }
-                    "Выбрать талон" -> {
-                        //patItems(model)
-                        //Text(model.getState())
-                        //Spacer(modifier = Modifier.height(8.dp))
-                        LazyColumnFor(talons) { talonItems(it, model) }
-                    }
-                    "Отложенные талоны" -> {
-                        //patItems(model)
-                        //Text(model.getState())
-                        //Spacer(modifier = Modifier.height(8.dp))
-                        LazyColumnFor(hist) { histItems(it, model) }
-                    }
-                    "Взять талон" -> {
-                        //patItems(model)
-                        //Text(model.getState())
-                        //Spacer(modifier = Modifier.height(8.dp))
-                        talonItemsEdit(model)
-                    }
-                    "Отменить талон" -> {
-                        //patItems(model)
-                        //Text(model.getState())
-                        //Spacer(modifier = Modifier.height(8.dp))
-                        talonItemsEdit(model)
-                    }
+                    "Выбрать врача" -> LazyColumnFor(docs) { docItems(it, model) }
+                    "Выбрать талон" -> LazyColumnFor(talons) { talonItems(it, model) }
+                    "Отложенные талоны" -> LazyColumnFor(hist) { histItems(it, model) }
+                    "Взять талон" -> talonItemsEdit(model)
+                    "Отменить талон" -> talonItemsEdit(model)
                 }
             }
         }

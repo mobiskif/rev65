@@ -109,44 +109,21 @@ fun usrItemsEdit(model: MainViewModel) {
 fun patItems(model: MainViewModel) {
     val user = model.user
     val state = model.state.value
-    val onclck: (usr: Map<String, String>) -> Unit = {
-        model.setState("Изменить пациента")
-    }
+    val onclck: (usr: Map<String, String>) -> Unit = { model.setState("Изменить пациента") }
     val currentState = model.getState()
     if (currentState != "Выбрать пациента") {
         Column(Modifier.clickable(onClick = { onclck(user) }).then(mpadd)) {
-            if (state == "Выбрать клинику") {
-                Text("${user["F"]} ${user["I"]} ${user["O"]}")
-                /*
-                Spacer(modifier = Modifier.height(8.dp))
-                TextButton(onClick = {
-                    model.updatePatList(user)
-                    model.setState("Мои карточки")
-                }) { Text("...", style = typography.body2) }
-                */
-            } else if (user["idPatSuccess"] == "true") {
-                if (state == "Выбрать специальность") {
-                    Text("${user["F"]} ${user["I"]} ${user["O"]}")
-                    Text(trimNull(user["LPUShortName"]) + ", карточка: " + trimNull(user["idPat"]))
-                }
-                if (state == "Отложенные талоны") {
-                    Text(trimNull(user["LPUShortName"]))
-                    Text("№: " + trimNull(user["idPat"]))
-                }
+            if (state == "Выбрать клинику") Text("${user["F"]} ${user["I"]} ${user["O"]}")
+            else if (user["idPatSuccess"] == "true") {
+                if (state == "Выбрать специальность") Text(trimNull(user["LPUShortName"]) + " карточка " + trimNull(user["idPat"]))
+                if (state == "Отложенные талоны") Text(trimNull(user["LPUShortName"]) + " карточка " + trimNull(user["idPat"]))
                 if (state == "Выбрать врача") Text(trimNull(user["NameSpesiality"]))
+                if (state == "Выбрать талон") Text(trimNull(user["NameSpesiality"]) + " " + trimNull(user["DocName"]))
+                if (state == "Взять талон") Text(trimNull(user["NameSpesiality"]) + " " + trimNull(user["DocName"]))
+                if (state == "Отменить талон") Text(trimNull(user["NameSpesiality"]) + " " + trimNull(user["DocName"]))
                 if (state == "Мои карточки") Text(trimNull(user["R"]))
-                if (state == "Выбрать талон") {
-                    Text(trimNull(user["NameSpesiality"]))
-                    Text(trimNull(user["DocName"]))
-                }
-                if (state == "Взять талон") {
-                    Text(trimNull(user["NameSpesiality"]))
-                    Text(trimNull(user["DocName"]))
-                }
-                if (state == "Отменить талон") Text(trimNull(user["NameSpesiality"]))
-            } else {
-                Text(trimNull(user["idPat"]), color = Color.Red)
             }
+            else Text(trimNull(user["idPat"]), color = Color.Red)
         }
     }
     Spacer(modifier = Modifier.height(8.dp))
