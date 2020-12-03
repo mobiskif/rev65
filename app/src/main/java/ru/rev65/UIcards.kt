@@ -356,10 +356,12 @@ fun talonItemsEdit(model: MainViewModel) {
         }
         Column(mpadd) {
             val dat = usr["VisitStart"]?.split("T")?.get(0)
-            val tim = usr["VisitStart"]?.split("T")?.get(1)?.substring(0, 5)
             Text(trimNull(dat))
             Spacer(modifier = Modifier.height(8.dp))
-            Text(trimNull(tim))
+            if (usr["VisitStart"]!="null") {
+                val tim = usr["VisitStart"]?.split("T")?.get(1)?.substring(0, 5)
+                Text(trimNull(tim))
+            }
         }
     }
     Spacer(modifier = Modifier.height(8.dp))
