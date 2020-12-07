@@ -107,15 +107,18 @@ fun usrItemsEdit(model: MainViewModel) {
 @Composable
 fun patItems(model: MainViewModel) {
     val user = model.user
-    val state = model.state.value
+    val state = model.getState()
     val onclck: (usr: Map<String, String>) -> Unit = { model.setState("Изменить пациента") }
-    val currentState = model.getState()
     Column(Modifier.clickable(onClick = { onclck(user) })) {
-        if (currentState != "Выбрать пациента")
+        if (state == "Выбрать пациента") {
+            //
+        }
+        else
             if (state == "Выбрать клинику") Text("${user["F"]} ${user["I"]} ${user["O"]} ${user["D"]}")
-            else if (user["idPatSuccess"] == "true")
-                when (model.getState()) {
-                    "Выбрать клинику" -> Text("${user["F"]} ${user["I"]} ${user["O"]} ${user["D"]}")
+        else {
+            if (user["idPatSuccess"] == "true")
+                when (state) {
+                    //"Выбрать клинику" -> Text("${user["F"]} ${user["I"]} ${user["O"]} ${user["D"]}")
                     "Выбрать специальность" -> Text(trimNull(user["LPUShortName"]) + " карточка " + trimNull(user["idPat"]))
                     "Отложенные талоны" -> Text(trimNull(user["LPUShortName"]) + " карточка " + trimNull(user["idPat"]))
                     "Выбрать врача" -> Text(trimNull(user["NameSpesiality"]))
@@ -123,6 +126,7 @@ fun patItems(model: MainViewModel) {
                     "Мои карточки" -> Text(trimNull(user["R"]))
                 }
             else Text(trimNull(user["idPat"]), color = Color.Red)
+        }
     }
 }
 
