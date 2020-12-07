@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
             "Выбрать клинику" -> state = "Выбрать пациента"
             "Изменить пациента" -> state = "Выбрать пациента"
             "Добавить пациента" -> state = "Выбрать пациента"
+            "Информация" -> state = "Выбрать пациента"
             "Выбрать специальность" -> state = "Выбрать клинику"
             "Мои карточки" -> state = "Выбрать клинику"
             "Выбрать врача" -> state = "Выбрать специальность"
@@ -90,10 +91,10 @@ fun UI(model: MainViewModel) {
     val wait = model.wait.value == true
 
     myTheme {
-        Scaffold(floatingActionButton = { myFab(model) }, topBar = { myTopBar(model) }) {
+        Scaffold(floatingActionButton = { myFab(model) }, topBar = { myBar(model) }) {
             Column(modifier = mpadd) {
                 patItems(model)
-                Spacer(modifier = Modifier.height(8.dp))
+                //Spacer(modifier = Modifier.height(8.dp))
                 if (wait) { LinearProgressIndicator(mfw); Spacer(modifier = Modifier.height(8.dp)) }
                 when (model.getState()) {
                     "Изменить пациента" -> usrItemsEdit(model)
@@ -111,6 +112,7 @@ fun UI(model: MainViewModel) {
                     "Отложенные талоны" -> LazyColumnFor(hist) { histItems(it, model) }
                     "Взять талон" -> talonItemsEdit(model)
                     "Отменить талон" -> talonItemsEdit(model)
+                    "Информация" -> flops(model)
                 }
             }
         }

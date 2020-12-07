@@ -6,9 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +29,25 @@ fun myTopBar(model: MainViewModel) {
     val mod = Modifier.background(MaterialTheme.colors.primary).padding(16.dp).fillMaxWidth()
     val stl = MaterialTheme.typography.h6
     Text(modifier = mod, text = "${model.getState()}", style = stl, color = MaterialTheme.colors.contentColorFor(MaterialTheme.colors.primary))
+}
+
+@Composable
+fun myBar(model: MainViewModel) {
+    TopAppBar(
+        title = { Text("${model.getState()}", maxLines = 1) },
+        /*
+        navigationIcon = {
+            IconButton(onClick = { model.setState("Выбрать пациента") }) {
+                androidx.compose.material.Icon(Icons.Filled.Person)
+            }
+        }
+        */
+        actions = {
+            IconButton(onClick = { model.setState("Информация") }) {
+                androidx.compose.material.Icon(Icons.Filled.Info)
+            }
+        }
+    )
 }
 
 @Composable

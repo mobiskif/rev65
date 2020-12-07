@@ -5,6 +5,8 @@ import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -107,27 +109,46 @@ fun usrItemsEdit(model: MainViewModel) {
 @Composable
 fun patItems(model: MainViewModel) {
     val user = model.user
-    val state = model.getState()
-    val onclck: (usr: Map<String, String>) -> Unit = { model.setState("Изменить пациента") }
-    Column(Modifier.clickable(onClick = { onclck(user) })) {
-        if (state == "Выбрать пациента") {
-            //
+    if (user["idPatSuccess"] == "true") {
+        when (model.getState()) {
+            "Изменить пациента" -> {}
+            "Добавить пациента" -> {}
+            "Выбрать пациента" -> {}
+            "Выбрать клинику" -> {}
+            "Мои карточки" -> {}
+            "Выбрать специальность" -> {
+                    Text(trimNull(user["LPUShortName"]))
+                    Text("Карточка: " + trimNull(user["idPat"]))
+            }
+            "Выбрать врача" -> {
+                    Text(trimNull(user["LPUShortName"]))
+                    Text("Карточка: " + trimNull(user["idPat"]))
+                    Text(trimNull(user["NameSpesiality"]))
+            }
+            "Выбрать талон" -> {
+                    Text(trimNull(user["LPUShortName"]))
+                    Text("Карточка: " + trimNull(user["idPat"]))
+            }
+            "Отложенные талоны" -> {}
+            "Взять талон" -> {
+                    Text(trimNull(user["LPUShortName"]))
+                    Text("Карточка: " + trimNull(user["idPat"]))
+            }
+            "Отменить талон" -> {
+                    Text(trimNull(user["LPUShortName"]))
+                    Text("Карточка: " + trimNull(user["idPat"]))
+            }
+            "Информация" -> {}
         }
-        else
-            if (state == "Выбрать клинику") Text("${user["F"]} ${user["I"]} ${user["O"]} ${user["D"]}")
-        else {
-            if (user["idPatSuccess"] == "true")
-                when (state) {
-                    //"Выбрать клинику" -> Text("${user["F"]} ${user["I"]} ${user["O"]} ${user["D"]}")
-                    "Выбрать специальность" -> Text(trimNull(user["LPUShortName"]) + " карточка " + trimNull(user["idPat"]))
-                    "Отложенные талоны" -> Text(trimNull(user["LPUShortName"]) + " карточка " + trimNull(user["idPat"]))
-                    "Выбрать врача" -> Text(trimNull(user["NameSpesiality"]))
-                    //"Выбрать талон" -> Text(trimNull(user["NameSpesiality"]))
-                    "Мои карточки" -> Text(trimNull(user["R"]))
-                }
-            else Text(trimNull(user["idPat"]), color = Color.Red)
+        Spacer(modifier = Modifier.height(8.dp))
+    }
+    else {
+        if ( model.getState() != "Выбрать пациента" && model.getState() != "Выбрать клинику" ) {
+            Text(trimNull(user["idPat"]), color = Color.Red)
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
+
 }
 
 
