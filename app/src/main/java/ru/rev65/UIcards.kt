@@ -119,31 +119,35 @@ fun patItems(model: MainViewModel) {
             "Выбрать специальность" -> {
                     Text(trimNull(user["LPUShortName"]))
                     Text("Карточка: " + trimNull(user["idPat"]))
+                Spacer(modifier = Modifier.height(8.dp))
             }
             "Выбрать врача" -> {
                     Text(trimNull(user["LPUShortName"]))
                     Text("Карточка: " + trimNull(user["idPat"]))
                     Text(trimNull(user["NameSpesiality"]))
+                Spacer(modifier = Modifier.height(8.dp))
             }
             "Выбрать талон" -> {
                     Text(trimNull(user["LPUShortName"]))
                     Text("Карточка: " + trimNull(user["idPat"]))
+                Spacer(modifier = Modifier.height(8.dp))
             }
             "Отложенные талоны" -> {}
             "Взять талон" -> {
                     Text(trimNull(user["LPUShortName"]))
                     Text("Карточка: " + trimNull(user["idPat"]))
+                Spacer(modifier = Modifier.height(8.dp))
             }
             "Отменить талон" -> {
                     Text(trimNull(user["LPUShortName"]))
                     Text("Карточка: " + trimNull(user["idPat"]))
+                Spacer(modifier = Modifier.height(8.dp))
             }
             "Информация" -> {}
         }
-        Spacer(modifier = Modifier.height(8.dp))
     }
     else {
-        if ( model.getState() != "Выбрать пациента" && model.getState() != "Выбрать клинику" ) {
+        if ( model.getState() != "Выбрать пациента" && model.getState() != "Выбрать клинику" && model.getState() != "Добавить пациента" && model.getState() != "Информация" ) {
             Text(trimNull(user["idPat"]), color = Color.Red)
             Spacer(modifier = Modifier.height(8.dp))
         }

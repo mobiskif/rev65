@@ -1,9 +1,12 @@
 package ru.rev65
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class MainViewModel : ViewModel() {
@@ -121,8 +124,38 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun runf() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                var value = 0f
+                val isVisible = true
+                while (isVisible) {
+                    var X = 0.0f
+                    val t1 = System.currentTimeMillis()
+                    var i: Long = 0
+                    while (i <= 100e6f) {
+                        X = i * 1.0f
+                        i++
+                    }
+                    val t2 = System.currentTimeMillis()
+                    val time = (t2 - t1) / 1000f
+                    value = 1e-6.toFloat() * X / time
+                    //setText(s)
+                    try {
+                        Thread.sleep(3000)
+                        val s = String.format("%.0f", value) + "MF  " + String.format("%.2f", time) + " сек " + Thread.currentThread().id
+                        Log.d("jop", "$s")
+                    } catch (e: InterruptedException) {
+                    }
+                }
+                value = 0f
+            }
+        }
+    }
+
+
     init {
-        readDistrList()
+        //readDistrList()
     }
 
 }

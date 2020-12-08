@@ -1,6 +1,7 @@
 package ru.rev65
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -9,12 +10,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.foundation.lazy.LazyRowFor
+import androidx.compose.material.Button
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -77,6 +82,8 @@ class MainActivity : AppCompatActivity() {
         }
         model.setState(state)
     }
+
+
 }
 
 @Composable
@@ -94,7 +101,6 @@ fun UI(model: MainViewModel) {
         Scaffold(floatingActionButton = { myFab(model) }, topBar = { myBar(model) }) {
             Column(modifier = mpadd) {
                 patItems(model)
-                //Spacer(modifier = Modifier.height(8.dp))
                 if (wait) { LinearProgressIndicator(mfw); Spacer(modifier = Modifier.height(8.dp)) }
                 when (model.getState()) {
                     "Изменить пациента" -> usrItemsEdit(model)
@@ -116,5 +122,14 @@ fun UI(model: MainViewModel) {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun flops(model: MainViewModel) {
+    Button({
+        model.runf()
+    }) {
+        Text("kuku")
     }
 }
