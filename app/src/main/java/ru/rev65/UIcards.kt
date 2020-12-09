@@ -109,6 +109,7 @@ fun usrItemsEdit(model: MainViewModel) {
 @Composable
 fun patItems(model: MainViewModel) {
     val user = model.user
+    val st = MaterialTheme.typography.h6
     if (user["idPatSuccess"] == "true") {
         when (model.getState()) {
             "Изменить пациента" -> {}
@@ -117,14 +118,14 @@ fun patItems(model: MainViewModel) {
             "Выбрать клинику" -> {}
             "Мои карточки" -> {}
             "Выбрать специальность" -> {
-                    Text(trimNull(user["LPUShortName"]))
-                    Text("Карточка: " + trimNull(user["idPat"]))
+                    Text(trimNull(user["LPUShortName"]), style = st)
+                    Text("Карточка: " + trimNull(user["idPat"]), style = st)
                 Spacer(modifier = Modifier.height(8.dp))
             }
             "Выбрать врача" -> {
-                    Text(trimNull(user["LPUShortName"]))
-                    Text("Карточка: " + trimNull(user["idPat"]))
-                    Text(trimNull(user["NameSpesiality"]))
+                    Text(trimNull(user["LPUShortName"]), style = st)
+                    Text("Карточка: " + trimNull(user["idPat"]), style = st)
+                    Text(trimNull(user["NameSpesiality"]), style = st)
                 Spacer(modifier = Modifier.height(8.dp))
             }
             "Выбрать талон" -> {
@@ -148,7 +149,7 @@ fun patItems(model: MainViewModel) {
     }
     else {
         if ( model.getState() != "Выбрать пациента" && model.getState() != "Выбрать клинику" && model.getState() != "Добавить пациента" && model.getState() != "Информация" ) {
-            Text(trimNull(user["idPat"]), color = Color.Red)
+            Text(trimNull(user["idPat"]), color = Color.Red, style = st)
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
