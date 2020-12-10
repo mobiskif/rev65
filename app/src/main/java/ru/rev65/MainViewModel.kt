@@ -155,7 +155,7 @@ class MainViewModel : ViewModel() {
 
 
     init {
-        //readDistrList()
+        readDistrList()
     }
 
 }
