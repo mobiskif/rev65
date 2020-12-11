@@ -144,7 +144,7 @@ class MainViewModel : ViewModel() {
                     try {
                         Thread.sleep(3000)
                         val s = String.format("%.0f", value) + "MF  " + String.format("%.2f", time) + " сек " + Thread.currentThread().id
-                        Log.d("jop", "$s")
+                        Log.d("jop", s)
                     } catch (e: InterruptedException) {
                     }
                 }
