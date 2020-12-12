@@ -1,5 +1,6 @@
 package ru.rev65
 
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -123,6 +124,7 @@ fun UI(model: MainViewModel) {
                     "Взять талон" -> talonItemsEdit(model)
                     "Отменить талон" -> talonItemsEdit(model)
                     "Информация" -> {
+                        Text("${Build.MANUFACTURER} ${Build.MODEL}")
                         val s = String.format("%.2f", model.mf)
                         Button(onClick = { model.runf() }) { Text (s) }
                         model.mf = 0f
