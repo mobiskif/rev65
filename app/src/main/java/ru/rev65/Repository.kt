@@ -10,7 +10,7 @@ import java.lang.Exception
 
 class Repository {
 
-    private val _wait = MutableLiveData(false)
+    val _wait = MutableLiveData(false)
     val wait: LiveData<Boolean> = _wait
     private val _idTalon = MutableLiveData<Map<String, String>>()
     val idTalon: LiveData<Map<String, String>> = _idTalon
@@ -33,6 +33,8 @@ class Repository {
     val usrList: LiveData<List<Map<String, String>>> = _usrList
     private var _distrList = MutableLiveData<List<Map<String, String>>>()
     val distrList: LiveData<List<Map<String, String>>> = _distrList
+    private var _flopsList = MutableLiveData<List<Map<String, String>>>()
+    val flopsList: LiveData<List<Map<String, String>>> = _flopsList
 
     private val pat1 = mapOf(
         "F" to "Пациент",
@@ -270,6 +272,16 @@ class Repository {
                 val res2 = mutableListOf(mapOf("Success" to "false", "Delete" to "true"))
                 _idTalon.postValue(res2[0])
             }
+            _wait.postValue(false)
+        }
+    }
+
+    suspend fun addFlopsToList(map: Map<String, String>) {
+        Log.d("jop", "-- addFlopsToList")
+        withContext(Dispatchers.IO) {
+            _wait.postValue(true)
+            var ll = if (!flopsList.value.isNullOrEmpty()) flopsList.value as List else listOf()
+            _flopsList.postValue(ll.plus(map))
             _wait.postValue(false)
         }
     }

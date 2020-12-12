@@ -110,43 +110,49 @@ fun patItems(model: MainViewModel) {
     val st = MaterialTheme.typography.h6
     if (user["idPatSuccess"] == "true") {
         when (model.getState()) {
-            "Изменить пациента" -> {}
-            "Добавить пациента" -> {}
-            "Выбрать пациента" -> {}
-            "Выбрать клинику" -> {}
-            "Мои карточки" -> {}
+            "Изменить пациента" -> {
+            }
+            "Добавить пациента" -> {
+            }
+            "Выбрать пациента" -> {
+            }
+            "Выбрать клинику" -> {
+            }
+            "Мои карточки" -> {
+            }
             "Выбрать специальность" -> {
-                    Text(trimNull(user["LPUShortName"]), style = st)
-                    Text("Карточка: " + trimNull(user["idPat"]), style = st)
+                Text(trimNull(user["LPUShortName"]), style = st)
+                Text("Карточка: " + trimNull(user["idPat"]), style = st)
                 Spacer(modifier = Modifier.height(8.dp))
             }
             "Выбрать врача" -> {
-                    Text(trimNull(user["LPUShortName"]), style = st)
-                    Text("Карточка: " + trimNull(user["idPat"]), style = st)
-                    Text(trimNull(user["NameSpesiality"]), style = st)
+                Text(trimNull(user["LPUShortName"]), style = st)
+                Text("Карточка: " + trimNull(user["idPat"]), style = st)
+                Text(trimNull(user["NameSpesiality"]), style = st)
                 Spacer(modifier = Modifier.height(8.dp))
             }
             "Выбрать талон" -> {
-                    Text(trimNull(user["LPUShortName"]))
-                    Text("Карточка: " + trimNull(user["idPat"]))
+                Text(trimNull(user["LPUShortName"]))
+                Text("Карточка: " + trimNull(user["idPat"]))
                 Spacer(modifier = Modifier.height(8.dp))
             }
-            "Отложенные талоны" -> {}
+            "Отложенные талоны" -> {
+            }
             "Взять талон" -> {
-                    Text(trimNull(user["LPUShortName"]))
-                    Text("Карточка: " + trimNull(user["idPat"]))
+                Text(trimNull(user["LPUShortName"]))
+                Text("Карточка: " + trimNull(user["idPat"]))
                 Spacer(modifier = Modifier.height(8.dp))
             }
             "Отменить талон" -> {
-                    Text(trimNull(user["LPUShortName"]))
-                    Text("Карточка: " + trimNull(user["idPat"]))
+                Text(trimNull(user["LPUShortName"]))
+                Text("Карточка: " + trimNull(user["idPat"]))
                 Spacer(modifier = Modifier.height(8.dp))
             }
-            "Информация" -> {}
+            "Информация" -> {
+            }
         }
-    }
-    else {
-        if ( model.getState() != "Выбрать пациента" && model.getState() != "Выбрать клинику" && model.getState() != "Добавить пациента" && model.getState() != "Информация" ) {
+    } else {
+        if (model.getState() != "Выбрать пациента" && model.getState() != "Выбрать клинику" && model.getState() != "Добавить пациента" && model.getState() != "Информация") {
             Text(trimNull(user["idPat"]), color = Color.Red, style = st)
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -386,7 +392,7 @@ fun talonItemsEdit(model: MainViewModel) {
             val dat = usr["VisitStart"]?.split("T")?.get(0)
             Text(trimNull(dat))
             Spacer(modifier = Modifier.height(8.dp))
-            if (usr["VisitStart"]!="null") {
+            if (usr["VisitStart"] != "null") {
                 val tim = usr["VisitStart"]?.split("T")?.get(1)?.substring(0, 5)
                 Text(trimNull(tim))
             }
@@ -402,4 +408,25 @@ fun talonItemsEdit(model: MainViewModel) {
         TextButton(onClick = { model.setState("Выбрать специальность") }) { Text("Нет") }
     }
     Spacer(modifier = Modifier.height(8.dp))
+}
+
+@Composable
+fun flopsItems(map: Map<String, String>, model: MainViewModel) {
+    val v = map["MF"]?.toFloat()!!
+    model.mf += v
+    val s = String.format("%.2f", v)
+    Text(s)
+    /*
+    Row(modifier = mbord.then(mpadd).then(mfw)) {
+        Column(mf062.then(mpadd)) {
+            Button(onClick = { }) {
+                Text("${map}")
+            }
+        }
+        Column(mpadd) {
+            Text("MFLOPS", style = typography.body2)
+        }
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+         */
 }

@@ -27,7 +27,10 @@ class MainActivity : AppCompatActivity() {
         File(filesDir, "usrlist.csv").createNewFile()
         model.usrfile = File(filesDir, "usrlist.csv")
 
-        model.wait.observe(this, { setContent { UI(model) } })
+        model.wait.observe(this, {
+            //Log.d("jop","$it ${model.flopsList.value}")
+            if (!it) setContent { UI(model) }
+        })
         model.state.observe(this, {
             setContent { UI(model) }
             if (model.getState() == "Выбрать врача" && model.user["idPatSuccess"] == "false") Toast.makeText(this, "Запись невозможна: карточки пациента нет в регистратуре!", Toast.LENGTH_LONG).show()
@@ -47,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 else Toast.makeText(this, "Талон отменен!", Toast.LENGTH_LONG).show()
                 model.readHistList(model.user)
                 model.setState("Отложенные талоны")
-            } else Toast.makeText(this, "Действие не выполнено, отказано регистратурой!", Toast.LENGTH_LONG).show()
+            } else Toast.makeText(this, "Действие не выполнено: отклонено регистратурой!", Toast.LENGTH_LONG).show()
         })
     }
 
@@ -92,13 +95,17 @@ fun UI(model: MainViewModel) {
     val docs = if (!model.docList.value.isNullOrEmpty()) model.docList.value as List else listOf()
     val talons = if (!model.talonList.value.isNullOrEmpty()) model.talonList.value as List else listOf()
     val hist = if (!model.histList.value.isNullOrEmpty()) model.histList.value as List else listOf()
+    val flops = if (!model.flopsList.value.isNullOrEmpty()) model.flopsList.value as List else listOf()
     val wait = model.wait.value == true
 
     myTheme {
         Scaffold(floatingActionButton = { myFab(model) }, topBar = { myBar(model) }) {
             Column(modifier = mpadd) {
                 patItems(model)
-                if (wait) { LinearProgressIndicator(mfw); Spacer(modifier = Modifier.height(8.dp)) }
+                if (wait) {
+                    if (model.getState()!="Информация") LinearProgressIndicator(mfw);
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
                 when (model.getState()) {
                     "Изменить пациента" -> usrItemsEdit(model)
                     "Добавить пациента" -> usrItemsEdit(model)
@@ -115,18 +122,16 @@ fun UI(model: MainViewModel) {
                     "Отложенные талоны" -> LazyColumnFor(hist) { histItems(it, model) }
                     "Взять талон" -> talonItemsEdit(model)
                     "Отменить талон" -> talonItemsEdit(model)
-                    "Информация" -> flops(model)
+                    "Информация" -> {
+                        val s = String.format("%.2f", model.mf)
+                        Button(onClick = { model.runf() }) { Text (s) }
+                        model.mf = 0f
+                        LazyColumnFor(flops) {
+                            flopsItems(it, model)
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun flops(model: MainViewModel) {
-    Button({
-        model.runf()
-    }) {
-        Text("kuku")
     }
 }

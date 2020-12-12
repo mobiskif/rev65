@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 class MainViewModel : ViewModel() {
+    var mf = 0f
     val state = MutableLiveData("Выбрать пациента")
     var user: Map<String, String> = mapOf()
     lateinit var usrfile: File
@@ -27,6 +28,7 @@ class MainViewModel : ViewModel() {
     val talonList = repository.talonList
     var usrList = repository.usrList
     var distrList = repository.distrList
+    var flopsList = repository.flopsList
 
     fun setState(state: String) {
         this.state.postValue(state)
@@ -126,6 +128,8 @@ class MainViewModel : ViewModel() {
 
     fun runf() {
         viewModelScope.launch {
+            val m = mutableMapOf("MF" to "0")
+            repository.addFlopsToList(m)
             withContext(Dispatchers.IO) {
                 var value = 0f
                 val isVisible = true
@@ -141,10 +145,13 @@ class MainViewModel : ViewModel() {
                     val time = (t2 - t1) / 1000f
                     value = 1e-6.toFloat() * X / time
                     //setText(s)
+                    m["MF"] = value.toString()
                     try {
+                        repository._wait.postValue(true)
                         Thread.sleep(3000)
                         val s = String.format("%.0f", value) + "MF  " + String.format("%.2f", time) + " сек " + Thread.currentThread().id
                         Log.d("jop", s)
+                        repository._wait.postValue(false)
                     } catch (e: InterruptedException) {
                     }
                 }
