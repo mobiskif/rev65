@@ -14,5 +14,6 @@
       "versionName": "66.0",
       "outputFile": "app-release.apk"
     }
-  ]
+  ],
+  "elementType": "File"
 }

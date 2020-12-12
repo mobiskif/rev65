@@ -29,8 +29,8 @@ fun getCPUInfo(model: MainViewModel) {
         val fileReader = FileReader(procCpuInfo)
         val bufferedReader = BufferedReader(fileReader, readBlockSize)
         while (bufferedReader.readLine().also { temp = it } != null) {
-            //Log.i("jop", temp!!)
-            if (temp!!.contains("bogomips")) {
+            Log.i("jop", temp!!)
+            if (temp!!.contains("BogoMIPS", true)) {
                 Log.i("jop", temp!!.split(":")[1])
                 model.mf=temp!!.split(":")[1].toFloat()
             }
