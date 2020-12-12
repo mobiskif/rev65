@@ -73,6 +73,8 @@ class MainActivity : AppCompatActivity() {
                 model.setState("Отложенные талоны")
             } else Toast.makeText(this, "Действие не выполнено: отклонено регистратурой!", Toast.LENGTH_LONG).show()
         })
+        getCPUInfo(model)
+
     }
 
     override fun onResume() {
@@ -144,17 +146,15 @@ fun UI(model: MainViewModel) {
                     "Взять талон" -> talonItemsEdit(model)
                     "Отменить талон" -> talonItemsEdit(model)
                     "Информация" -> {
-                        /*
+                        Text("${Build.MANUFACTURER} ${Build.MODEL}")
+                        val s = String.format("%.2f", model.mf)
+                        Button(onClick = {
+                            model.runf()
+                        }) { Text(s) }
                         model.mf = 0f
                         LazyColumnFor(flops) {
                             flopsItems(it, model)
                         }
-                        */
-
-                        getCPUInfo(model)
-                        Text("${Build.MANUFACTURER} ${Build.MODEL}")
-                        val s = String.format("%.2f", model.mf)
-                        Button(onClick = { model.runf() }) { Text(s) }
                     }
                 }
             }
