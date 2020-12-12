@@ -2,6 +2,7 @@ package ru.rev65
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +19,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.unit.dp
-import java.io.File
+import java.io.*
+
+fun getCPUInfo(model: MainViewModel) {
+    val procCpuInfo = "/proc/cpuinfo"
+    var temp: String?
+    val readBlockSize = 8192
+    try {
+        val fileReader = FileReader(procCpuInfo)
+        val bufferedReader = BufferedReader(fileReader, readBlockSize)
+        while (bufferedReader.readLine().also { temp = it } != null) {
+            //Log.i("jop", temp!!)
+            if (temp!!.contains("bogomips")) {
+                Log.i("jop", temp!!.split(":")[1])
+                model.mf=temp!!.split(":")[1].toFloat()
+            }
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+}
 
 class MainActivity : AppCompatActivity() {
     private val model: MainViewModel by viewModels()
@@ -124,13 +144,17 @@ fun UI(model: MainViewModel) {
                     "Взять талон" -> talonItemsEdit(model)
                     "Отменить талон" -> talonItemsEdit(model)
                     "Информация" -> {
-                        Text("${Build.MANUFACTURER} ${Build.MODEL}")
-                        val s = String.format("%.2f", model.mf)
-                        Button(onClick = { model.runf() }) { Text (s) }
+                        /*
                         model.mf = 0f
                         LazyColumnFor(flops) {
                             flopsItems(it, model)
                         }
+                        */
+
+                        getCPUInfo(model)
+                        Text("${Build.MANUFACTURER} ${Build.MODEL}")
+                        val s = String.format("%.2f", model.mf)
+                        Button(onClick = { model.runf() }) { Text(s) }
                     }
                 }
             }
