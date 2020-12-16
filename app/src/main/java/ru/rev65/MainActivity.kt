@@ -145,7 +145,7 @@ fun UI(model: MainViewModel) {
                     "Отложенные талоны" -> LazyColumnFor(hist) { histItems(it, model) }
                     "Взять талон" -> talonItemsEdit(model)
                     "Отменить талон" -> talonItemsEdit(model)
-                    "Информация" -> {
+                    "Информацияz" -> {
                         Text("${Build.MANUFACTURER} ${Build.MODEL}")
                         val s = String.format("%.2f", model.mf)
                         Button(onClick = {

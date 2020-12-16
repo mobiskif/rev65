@@ -108,56 +108,64 @@ fun usrItemsEdit(model: MainViewModel) {
 fun patItems(model: MainViewModel) {
     val user = model.user
     val st = MaterialTheme.typography.h6
-    if (user["idPatSuccess"] == "true") {
-        when (model.getState()) {
-            "Изменить пациента" -> {
+    if (model.getState() != "Выбрать пациента") {
+        if (user["idPatSuccess"] == "true") {
+            Row(modifier = mbord.then(mpadd)) {
+                Column(mf062.clickable(onClick = { }).then(mpadd)) {
+                    Text("${user["idPatSuccess"]} ${user["F"]} ${user["I"]} ${user["O"]}", style = st)
+                }
+                Column(mpadd) {
+                    when (model.getState()) {
+                        "Изменить пациента" -> {
+                        }
+                        "Добавить пациента" -> {
+                        }
+                        "Выбрать пациента" -> {
+                        }
+                        "Выбрать клинику" -> {
+                        }
+                        "Мои карточки" -> {
+                        }
+                        "Выбрать специальность" -> {
+                            Text(trimNull(user["LPUShortName"]), style = st)
+                            Text("Карточка: " + trimNull(user["idPat"]), style = st)
+                            //Spacer(modifier = Modifier.height(8.dp))
+                        }
+                        "Выбрать врача" -> {
+                            Text(trimNull(user["LPUShortName"]), style = st)
+                            Text("Карточка: " + trimNull(user["idPat"]), style = st)
+                            Text(trimNull(user["NameSpesiality"]), style = st)
+                            //Spacer(modifier = Modifier.height(8.dp))
+                        }
+                        "Выбрать талон" -> {
+                            Text(trimNull(user["LPUShortName"]))
+                            Text("Карточка: " + trimNull(user["idPat"]), style = st)
+                            //Spacer(modifier = Modifier.height(8.dp))
+                        }
+                        "Отложенные талоны" -> {
+                        }
+                        "Взять талон" -> {
+                            Text(trimNull(user["LPUShortName"]))
+                            Text("Карточка: " + trimNull(user["idPat"]), style = st)
+                            //Spacer(modifier = Modifier.height(8.dp))
+                        }
+                        "Отменить талон" -> {
+                            Text(trimNull(user["LPUShortName"]))
+                            Text("Карточка: " + trimNull(user["idPat"]), style = st)
+                            //Spacer(modifier = Modifier.height(8.dp))
+                        }
+                        "Информация" -> {
+                        }
+                    }
+                }
             }
-            "Добавить пациента" -> {
-            }
-            "Выбрать пациента" -> {
-            }
-            "Выбрать клинику" -> {
-            }
-            "Мои карточки" -> {
-            }
-            "Выбрать специальность" -> {
-                Text(trimNull(user["LPUShortName"]), style = st)
-                Text("Карточка: " + trimNull(user["idPat"]), style = st)
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-            "Выбрать врача" -> {
-                Text(trimNull(user["LPUShortName"]), style = st)
-                Text("Карточка: " + trimNull(user["idPat"]), style = st)
-                Text(trimNull(user["NameSpesiality"]), style = st)
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-            "Выбрать талон" -> {
-                Text(trimNull(user["LPUShortName"]))
-                Text("Карточка: " + trimNull(user["idPat"]))
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-            "Отложенные талоны" -> {
-            }
-            "Взять талон" -> {
-                Text(trimNull(user["LPUShortName"]))
-                Text("Карточка: " + trimNull(user["idPat"]))
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-            "Отменить талон" -> {
-                Text(trimNull(user["LPUShortName"]))
-                Text("Карточка: " + trimNull(user["idPat"]))
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-            "Информация" -> {
+        } else {
+            if (model.getState() != "Выбрать клинику" && model.getState() != "Добавить пациента" && model.getState() != "Информация") {
+                Text(trimNull(user["idPat"]), color = Color.Red)
             }
         }
-    } else {
-        if (model.getState() != "Выбрать пациента" && model.getState() != "Выбрать клинику" && model.getState() != "Добавить пациента" && model.getState() != "Информация") {
-            Text(trimNull(user["idPat"]), color = Color.Red, style = st)
-            Spacer(modifier = Modifier.height(8.dp))
-        }
+        Spacer(modifier = Modifier.height(8.dp))
     }
-
 }
 
 
