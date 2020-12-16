@@ -42,12 +42,14 @@ fun myBar(model: MainViewModel) {
                 androidx.compose.material.Icon(Icons.Filled.Person)
             }
         }
-        */
+
         actions = {
             IconButton(onClick = { model.setState("Информация") }) {
                 Icon(Icons.Filled.Info)
             }
         }
+
+         */
     )
 }
 

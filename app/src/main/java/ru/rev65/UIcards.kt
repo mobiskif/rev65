@@ -113,7 +113,7 @@ fun patItems(model: MainViewModel) {
         if (user["idPatSuccess"] == "true") {
             Row(modifier = mpadd) {
                 Column(mf062.clickable(onClick = { }).then(mpadd)) {
-                    Text("${user["F"]} ${user["I"]} ${user["O"]}", style = st)
+                    Text("${user["F"]} ${user["I"]} ${user["O"]} ${user["D"]}", style = st)
                     //Text("№: " + trimNull(user["idPat"]), style = st)
                 }
                 Column(mpadd) {
@@ -153,7 +153,8 @@ fun patItems(model: MainViewModel) {
             }
         } else {
             if (model.getState() != "Изменить пациента" && model.getState() != "Выбрать пациента" && model.getState() != "Выбрать клинику" && model.getState() != "Добавить пациента" && model.getState() != "Информация") {
-                Text(trimNull(user["idPat"]), color = Color.Red)
+                Text("${user["F"]} ${user["I"]} ${user["O"]} ${user["D"]} \n", style = st)
+                Text(trimNull(user["LPUShortName"]) + ": " + trimNull(user["idPat"]), color = Color.Red)
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
