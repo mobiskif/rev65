@@ -114,7 +114,7 @@ fun patItems(model: MainViewModel) {
             Row(modifier = mpadd) {
                 Column(mf062.clickable(onClick = { }).then(mpadd)) {
                     Text("${user["F"]} ${user["I"]} ${user["O"]}", style = st)
-                    Text("№: " + trimNull(user["idPat"]), style = st)
+                    //Text("№: " + trimNull(user["idPat"]), style = st)
                 }
                 Column(mpadd) {
                     when (model.getState()) {
@@ -129,22 +129,22 @@ fun patItems(model: MainViewModel) {
                         "Мои карточки" -> {
                         }
                         "Выбрать специальность" -> {
-                            Text(trimNull(user["LPUShortName"]), style = st2)
+                            Text(trimNull(user["LPUShortName"]), style = st)
                         }
                         "Выбрать врача" -> {
-                            Text(trimNull(user["LPUShortName"]), style = st2)
-                            Text(trimNull(user["NameSpesiality"]), style = st2)
+                            Text(trimNull(user["LPUShortName"]), style = st)
+                            Text(trimNull(user["NameSpesiality"]), style = st)
                         }
                         "Выбрать талон" -> {
-                            Text(trimNull(user["LPUShortName"]), style = st2)
+                            Text(trimNull(user["LPUShortName"]), style = st)
                         }
                         "Отложенные талоны" -> {
                         }
                         "Взять талон" -> {
-                            Text(trimNull(user["LPUShortName"]), style = st2)
+                            Text(trimNull(user["LPUShortName"]), style = st)
                         }
                         "Отменить талон" -> {
-                            Text(trimNull(user["LPUShortName"]), style = st2)
+                            Text(trimNull(user["LPUShortName"]), style = st)
                         }
                         "Информация" -> {
                         }
