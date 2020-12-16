@@ -109,7 +109,7 @@ fun patItems(model: MainViewModel) {
     val user = model.user
     val st = MaterialTheme.typography.h6
     val st2 = MaterialTheme.typography.body2
-    if (model.getState() != "Выбрать пациента") {
+    if (model.getState() != "Выбрать пациента" && model.getState() != "Выбрать клинику" && model.getState() != "Добавить пациента" && model.getState() != "Информация") {
         if (user["idPatSuccess"] == "true") {
             Row(modifier = mpadd) {
                 Column(mf062.clickable(onClick = { }).then(mpadd)) {
@@ -152,7 +152,7 @@ fun patItems(model: MainViewModel) {
                 }
             }
         } else {
-            if (model.getState() != "Выбрать клинику" && model.getState() != "Добавить пациента" && model.getState() != "Информация") {
+            if (model.getState() != "Изменить пациента" && model.getState() != "Выбрать пациента" && model.getState() != "Выбрать клинику" && model.getState() != "Добавить пациента" && model.getState() != "Информация") {
                 Text(trimNull(user["idPat"]), color = Color.Red)
             }
         }
