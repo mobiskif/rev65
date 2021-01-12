@@ -15,7 +15,7 @@ class Hub2 {
     private val _soapPURL = "https://api.gorzdrav.spb.ru/Proxy/HubService.svc?wsdl"
     private val _xTEM = "http://tempuri.org/"
     private val _xHUB = "http://schemas.datacontract.org/2004/07/HubService2"
-    private val _gUID = "6b2158a1-56e0-4c09-b70b-139b14ffee14"
+    private val _gUID = "039E2126-0FCA-4E13-8AD6-AF303F7F0FC1"
 
     private fun getSoap(action: String, request: SoapObject): MutableList<Map<String, String>> {
         val list: MutableList<Map<String, String>> = mutableListOf()
