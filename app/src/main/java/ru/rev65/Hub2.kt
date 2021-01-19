@@ -11,6 +11,13 @@ import org.ksoap2.serialization.SoapSerializationEnvelope
 import org.ksoap2.transport.HttpTransportSE
 
 class Hub2 {
+    /*
+gorzdrav 039E2126-0FCA-4E13-8AD6-AF303F7F0FC1
+ЕПГУ 94AD0743-86BC-42D5-8EAA-DA80B6BC11C5
+Мобильные приложения 6B2158A1-56E0-4C09-B70B-139B14FFEE14
+     */
+
+
     //private val _soapPURL = "https://api.gorzdrav.spb.ru/Service/HubService.svc?wsdl"
     private val _soapPURL = "https://api.gorzdrav.spb.ru/Proxy/HubService.svc?wsdl"
     private val _xTEM = "http://tempuri.org/"
@@ -114,8 +121,8 @@ class Hub2 {
         request.addProperty("idDoc", args[1])
         request.addProperty("idLpu", args[0])
         request.addProperty("idPat", args[2])
-        request.addProperty("visitStart", "2020-11-01")
-        request.addProperty("visitEnd", "2020-12-31")
+        request.addProperty("visitStart", "2021-01-01")
+        request.addProperty("visitEnd", "2021-12-31")
         return getSoap(action, request)
     }
 
