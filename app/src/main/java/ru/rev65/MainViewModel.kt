@@ -1,5 +1,6 @@
 package ru.rev65
 
+import android.app.DatePickerDialog
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,13 +11,14 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 class MainViewModel : ViewModel() {
+    lateinit var dialog: DatePickerDialog
     var mf = 0f
     val state = MutableLiveData("Выбрать пациента")
     var user: Map<String, String> = mapOf()
     lateinit var usrfile: File
 
     private val repository = Repository()
-    val isAdmin = false
+    var isAdmin = false
     val wait = repository.wait
     val idPat = repository.idPat
     val idTalon = repository.idTalon

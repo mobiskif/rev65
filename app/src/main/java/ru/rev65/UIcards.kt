@@ -1,6 +1,8 @@
 package ru.rev65
 
+import android.app.DatePickerDialog
 import android.util.Log
+import android.widget.DatePicker
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import java.util.*
 
 private fun trimNull(s: String?): String {
     var result = "$s"
@@ -64,10 +67,18 @@ fun usrItemsEdit(model: MainViewModel) {
                     textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
                     onValueChange = { dD.value = it },
                     label = { Text("Дата рождения") }, //modifier = Modifier.padding(0.dp, 8.dp),
-                    placeholder = { Text(text = "1986-04-26") }
+                    placeholder = {
+                        Text(text = "1986-04-26")
+                        /*
+                        Button(onClick = {
+                            model.dialog.show()
+                        })
+                        { Text("+") }
+
+                         */
+                    }
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-
                 myDistrictSpinner(model, rR, irR)
 
                 val usr = model.user.toMutableMap()
@@ -170,11 +181,12 @@ fun usrItems(map: Map<String, String>, model: MainViewModel) {
     Row(modifier = mbord.then(mpadd).then(mfw)) {
         Column(mf062.clickable(onClick = { onclck(map) }).then(mpadd)) {
             Text("${map["F"]} ${map["I"]} ${map["O"]} \n${map["D"]} ", style = typography.body1)
+            Text("${map["R"]}", style = typography.body2)
         }
         Column(mpadd) {
-            Text("${map["R"]}", style = typography.body2)
+            //Text("${map["R"]}", style = typography.body2)
             IconButton(onClick = { model.user = map; model.setState("Изменить пациента") }) {
-                Icon(Icons.Default.Edit, "")
+                Icon(Icons.Default.Edit, "Edit",tint=Color.LightGray)
             }
         }
     }

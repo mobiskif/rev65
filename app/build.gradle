@@ -12,8 +12,6 @@ android {
         targetSdkVersion 30
         versionCode 68
         versionName "68.0"
-
-        //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -29,13 +27,6 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
         //useIR = true
-        /*
-        freeCompilerArgs += [
-                "-Xallow-jvm-ir-dependencies",
-                "-P",
-                "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
-        ]
-        */
     }
     buildFeatures {
         compose true

@@ -1,8 +1,11 @@
 package ru.rev65
 
+import android.app.DatePickerDialog
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.CalendarView
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -10,9 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.*
-//import androidx.compose.foundation.lazy.LazyColumnFor
-//import androidx.compose.foundation.lazy.LazyRowFor
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.Button
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
@@ -20,10 +22,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.platform.setContent
-//import androidx.compose.ui.unit.dp
-import java.io.*
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.currentCoroutineContext
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileReader
+import java.io.IOException
+import java.util.*
 
 fun getCPUInfo(model: MainViewModel) {
     val procCpuInfo = "/proc/cpuinfo"
@@ -77,8 +82,26 @@ class MainActivity : AppCompatActivity() {
                 model.setState("Отложенные талоны")
             } else Toast.makeText(this, "Действие не выполнено: отклонено регистратурой!", Toast.LENGTH_LONG).show()
         })
-        getCPUInfo(model)
+        //getCPUInfo(model)
 
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+        val datePickerDialog = DatePickerDialog(
+            this, DatePickerDialog.OnDateSetListener
+            { datePicker: DatePicker, day: Int, month: Int, year: Int ->
+                /*
+                setContent {
+                    Column {
+                        Text("$day, $month, $year")
+                    }
+                }
+                */
+                model.isAdmin=true
+            }, year, month, day
+        )
+        model.dialog = datePickerDialog
     }
 
     override fun onResume() {
