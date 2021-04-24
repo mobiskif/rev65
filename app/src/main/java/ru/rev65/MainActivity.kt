@@ -4,21 +4,25 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumnFor
-import androidx.compose.foundation.lazy.LazyRowFor
+import androidx.compose.foundation.lazy.*
+//import androidx.compose.foundation.lazy.LazyColumnFor
+//import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.Button
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.unit.dp
+//import androidx.compose.ui.Modifier
+//import androidx.compose.ui.platform.setContent
+//import androidx.compose.ui.unit.dp
 import java.io.*
 
 fun getCPUInfo(model: MainViewModel) {
@@ -132,17 +136,17 @@ fun UI(model: MainViewModel) {
                 when (model.getState()) {
                     "Изменить пациента" -> usrItemsEdit(model)
                     "Добавить пациента" -> usrItemsEdit(model)
-                    "Выбрать пациента" -> LazyColumnFor(usrs) { usrItems(it, model) }
-                    "Выбрать клинику" -> LazyColumnFor(lpus) { lpuItems(it, model) }
-                    "Мои карточки" -> LazyColumnFor(pats) { cardItems(it, model) }
+                    "Выбрать пациента" -> LazyColumn {items(usrs.size) { usrItems(usrs[it], model) }}
+                    "Выбрать клинику" -> LazyColumn {items(lpus.size) { lpuItems(lpus[it], model) }}
+                    "Мои карточки" -> LazyColumn {items(pats.size) { cardItems(pats[it], model) }}
                     "Выбрать специальность" -> {
-                        LazyRowFor(hist) { histItems(it, model) }
+                        LazyRow {items(hist.size) { histItems(hist[it], model) }}
                         Spacer(modifier = Modifier.height(8.dp))
-                        LazyColumnFor(specs) { specItems(it, model) }
+                        LazyColumn {items(specs.size) { specItems(specs[it], model) }}
                     }
-                    "Выбрать врача" -> LazyColumnFor(docs) { docItems(it, model) }
-                    "Выбрать талон" -> LazyColumnFor(talons) { talonItems(it, model) }
-                    "Отложенные талоны" -> LazyColumnFor(hist) { histItems(it, model) }
+                    "Выбрать врача" -> LazyColumn {items(docs.size) { docItems(docs[it], model) }}
+                    "Выбрать талон" -> LazyColumn {items(talons.size) { talonItems(talons[it], model) }}
+                    "Отложенные талоны" -> LazyColumn {items(hist.size) { histItems(hist[it], model) }}
                     "Взять талон" -> talonItemsEdit(model)
                     "Отменить талон" -> talonItemsEdit(model)
                     "Информацияz" -> {
@@ -152,9 +156,7 @@ fun UI(model: MainViewModel) {
                             model.runf()
                         }) { Text(s) }
                         model.mf = 0f
-                        LazyColumnFor(flops) {
-                            flopsItems(it, model)
-                        }
+                        LazyColumn {items(flops.size) { flopsItems(flops[it], model) }}
                     }
                 }
             }

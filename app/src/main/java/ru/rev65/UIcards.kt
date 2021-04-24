@@ -1,7 +1,6 @@
 package ru.rev65
 
 import android.util.Log
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -39,9 +38,7 @@ fun usrItemsEdit(model: MainViewModel) {
         rR = remember { mutableStateOf(TextFieldValue("${model.user["R"]}")) }
         irR = remember { mutableStateOf(TextFieldValue("${model.user["iR"]}")) }
     }
-    ScrollableColumn {
-
-
+    Column {
         Row {
             Column {
                 OutlinedTextField(
@@ -177,7 +174,7 @@ fun usrItems(map: Map<String, String>, model: MainViewModel) {
         Column(mpadd) {
             Text("${map["R"]}", style = typography.body2)
             IconButton(onClick = { model.user = map; model.setState("Изменить пациента") }) {
-                Icon(Icons.Default.Edit, tint = Color.LightGray, modifier = Modifier.preferredSize(18.dp))
+                Icon(Icons.Default.Edit, "")
             }
         }
     }

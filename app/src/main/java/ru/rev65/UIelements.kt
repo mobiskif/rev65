@@ -8,7 +8,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +26,10 @@ val mf062 = Modifier.fillMaxWidth(0.62f)
 
 @Composable
 fun myTopBar(model: MainViewModel) {
-    val mod = Modifier.background(MaterialTheme.colors.primary).padding(16.dp).fillMaxWidth()
+    val mod = Modifier
+        .background(MaterialTheme.colors.primary)
+        .padding(16.dp)
+        .fillMaxWidth()
     val stl = MaterialTheme.typography.h6
     Text(modifier = mod, text = model.getState(), style = stl, color = MaterialTheme.colors.contentColorFor(MaterialTheme.colors.primary))
 }
@@ -59,7 +61,9 @@ fun myColumn(
     children: @Composable () -> Unit
 ) {
     Spacer(modifier = Modifier.height(8.dp))
-    Column(modifier = (col.then(mbord).then(mpadd)).then(Modifier.fillMaxWidth())) {
+    Column(modifier = (col
+        .then(mbord)
+        .then(mpadd)).then(Modifier.fillMaxWidth())) {
         children()
     }
     Spacer(modifier = Modifier.height(8.dp))
@@ -69,7 +73,7 @@ fun myColumn(
 fun myFab(model: MainViewModel) {
     if (model.getState() == "Выбрать пациента") {
         FloatingActionButton(onClick = { model.setState("Добавить пациента") }) {
-            Icon(Icons.Filled.Add)
+            Icon(Icons.Filled.Add,"Add")
         }
     } /*else if (model.getState() == "Выбрать специальность") {
         FloatingActionButton(onClick = {
@@ -85,24 +89,23 @@ fun myFab(model: MainViewModel) {
 fun myDistrictSpinner(model: MainViewModel, rR: MutableState<TextFieldValue>, irR: MutableState<TextFieldValue>) {
     val dlist = model.distrList.value
     val expanded = remember { mutableStateOf(false) }
-
-    val iconButton = @Composable {
+    val iconButton =
         Row(mpadd) {
             Text(
                 "Район: " + rR.value.text,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
             IconButton(onClick = { expanded.value = true }) {
-                Icon(Icons.Default.ArrowDropDown)
+                Icon(Icons.Default.ArrowDropDown,"District")
             }
         }
-    }
 
     Row {
+        iconButton
         DropdownMenu(
             expanded = expanded.value,
-            onDismissRequest = { expanded.value = false },
-            toggle = iconButton
+            onDismissRequest = { expanded.value = false }
+            //toggle = iconButton
         ) {
             Column {
                 dlist?.forEach {
