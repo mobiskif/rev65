@@ -10,8 +10,8 @@ android {
         applicationId "ru.healthy"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 68
-        versionName "68.0"
+        versionCode 69
+        versionName "69.0"
     }
 
     buildTypes {

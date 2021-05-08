@@ -1,8 +1,6 @@
-package ru.rev65
+package ru.rev69
 
-import android.app.DatePickerDialog
 import android.util.Log
-import android.widget.DatePicker
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import java.util.*
 
 private fun trimNull(s: String?): String {
     var result = "$s"

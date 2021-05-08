@@ -1,4 +1,4 @@
-package ru.rev65
+package ru.rev69
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.*

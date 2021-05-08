@@ -1,6 +1,5 @@
-package ru.rev65
+package ru.rev69
 
-import android.Manifest
 import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.database.Cursor
@@ -9,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.util.Log
-import android.widget.CalendarView
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -30,8 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.currentCoroutineContext
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader

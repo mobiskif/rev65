@@ -2,7 +2,7 @@
     "LocalVariableName", "LocalVariableName", "LocalVariableName", "LocalVariableName"
 )
 
-package ru.rev65
+package ru.rev69
 
 import org.ksoap2.SoapEnvelope
 import org.ksoap2.serialization.PropertyInfo
