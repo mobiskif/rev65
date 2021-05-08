@@ -6,8 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -38,32 +37,53 @@ fun myTopBar(model: MainViewModel) {
 fun myBar(model: MainViewModel) {
     TopAppBar(
         title = { Text(model.getState(), maxLines = 1) },
-        /*
+
         navigationIcon = {
             IconButton(onClick = { model.setState("Выбрать пациента") }) {
-                androidx.compose.material.Icon(Icons.Filled.Person)
+                Icon(Icons.Filled.Menu, "")
             }
-        }
-
+        },
+/*
         actions = {
-            IconButton(onClick = { model.setState("Информация") }) {
-                Icon(Icons.Filled.Info)
+            IconButton(onClick = { model.setState("Информация")  }) {
+                Icon(Icons.Filled.Warning,"")
+            }
+        },
+*/
+        actions = {
+            val expanded = remember { mutableStateOf(false) }
+            IconButton(onClick = { expanded.value = true }) {
+                Icon(Icons.Default.MoreVert, "Menu")
+            }
+            DropdownMenu(
+                expanded = expanded.value,
+                onDismissRequest = { expanded.value = false }
+            ) {
+                DropdownMenuItem(
+                    onClick = { model.setState("Выбрать пациента") },
+                    content = { Text("SearchTop10") }
+                )
+                DropdownMenuItem(
+                    onClick = { model.isAdmin = true },
+                    content = { Text("Домой") }
+                )
+                //Divider()
             }
         }
-
-         */
     )
 }
 
 @Composable
 fun myColumn(
-    col: Modifier = mWhite.then(Modifier.clickable(onClick = {  })),
+    col: Modifier = mWhite.then(Modifier.clickable(onClick = { })),
     children: @Composable () -> Unit
 ) {
     Spacer(modifier = Modifier.height(8.dp))
-    Column(modifier = (col
-        .then(mbord)
-        .then(mpadd)).then(Modifier.fillMaxWidth())) {
+    Column(
+        modifier = (col
+            .then(mbord)
+            .then(mpadd)).then(Modifier.fillMaxWidth())
+    ) {
         children()
     }
     Spacer(modifier = Modifier.height(8.dp))
@@ -73,16 +93,27 @@ fun myColumn(
 fun myFab(model: MainViewModel) {
     if (model.getState() == "Выбрать пациента") {
         FloatingActionButton(onClick = { model.setState("Добавить пациента") }) {
-            Icon(Icons.Filled.Add,"Add")
+            Icon(Icons.Filled.Add, "Add")
         }
-    } /*else if (model.getState() == "Выбрать специальность") {
-        FloatingActionButton(onClick = {
-            //model.readHistList(model.user)
-            model.setState("Отложенные талоны")
-        }) {
-            Icon(Icons.Filled.DateRange)
+    }
+}
+
+@Composable
+fun myTopDropDownMenu(model: MainViewModel) {
+    val expanded = remember { mutableStateOf(false) }
+    Row {
+        DropdownMenu(
+            expanded = expanded.value,
+            onDismissRequest = { expanded.value = false }
+        ) {
+            DropdownMenuItem(onClick = {
+                model.isAdmin = true
+            }) {
+                Text("SearchTop10")
+            }
+            //Divider()
         }
-    }*/
+    }
 }
 
 @Composable
@@ -96,7 +127,7 @@ fun myDistrictSpinner(model: MainViewModel, rR: MutableState<TextFieldValue>, ir
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
             IconButton(onClick = { expanded.value = true }) {
-                Icon(Icons.Default.ArrowDropDown,"District")
+                Icon(Icons.Default.ArrowDropDown, "District")
             }
         }
 

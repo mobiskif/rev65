@@ -4,12 +4,14 @@ import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -39,89 +41,85 @@ fun usrItemsEdit(model: MainViewModel) {
         irR = remember { mutableStateOf(TextFieldValue("${model.user["iR"]}")) }
     }
     Column {
-        Row {
-            Column {
-                OutlinedTextField(
-                    value = fF.value,
-                    textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
-                    onValueChange = { fF.value = it },
-                    label = { Text("Фамилия") }//, modifier = Modifier.padding(0.dp, 8.dp)
-                )
-                OutlinedTextField(
-                    value = iI.value,
-                    textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
-                    onValueChange = { iI.value = it },
-                    label = { Text("Имя") }//, modifier = Modifier.padding(0.dp, 8.dp)
-                )
-                OutlinedTextField(
-                    value = oO.value,
-                    textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
-                    onValueChange = { oO.value = it },
-                    label = { Text("Отчество") }//, modifier = Modifier.padding(0.dp, 8.dp)
-                )
-                OutlinedTextField(
-                    value = dD.value,
-                    textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
-                    onValueChange = { dD.value = it },
-                    label = { Text("Дата рождения") }, //modifier = Modifier.padding(0.dp, 8.dp),
-                    placeholder = {
-                        Text(text = "1986-04-26")
-                        /*
-                        Button(onClick = {
-                            model.dialog.show()
-                        })
-                        { Text("+") }
+        OutlinedTextField(
+            value = fF.value,
+            textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
+            onValueChange = { fF.value = it },
+            label = { Text("Фамилия") }//, modifier = Modifier.padding(0.dp, 8.dp)
+        )
+        OutlinedTextField(
+            value = iI.value,
+            textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
+            onValueChange = { iI.value = it },
+            label = { Text("Имя") }//, modifier = Modifier.padding(0.dp, 8.dp)
+        )
+        OutlinedTextField(
+            value = oO.value,
+            textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
+            onValueChange = { oO.value = it },
+            label = { Text("Отчество") }//, modifier = Modifier.padding(0.dp, 8.dp)
+        )
+        OutlinedTextField(
+            value = dD.value,
+            textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
+            onValueChange = { dD.value = it },
+            label = { Text("Дата рождения") }, //modifier = Modifier.padding(0.dp, 8.dp),
+            placeholder = {
+                Text(text = "1986-04-26")
+                /*
+                Button(onClick = {
+                    model.dialog.show()
+                })
+                { Text("+") }
 
-                         */
-                    }
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                myDistrictSpinner(model, rR, irR)
-
-                val usr = model.user.toMutableMap()
-                val fieldstouser: () -> Unit = {
-                    usr["F"] = fF.value.text
-                    usr["I"] = iI.value.text
-                    usr["O"] = oO.value.text
-                    usr["D"] = dD.value.text
-                    usr["R"] = rR.value.text
-                    usr["iR"] = irR.value.text
-                }
-                Row {
-                    TextButton(onClick = {
-                        fieldstouser()
-                        model.deleteUser(usr)
-                        model.setState("Выбрать пациента")
-                    }) { Text("Удалить") }
-
-                    Button(onClick = {
-                        fieldstouser()
-                        if (model.getState() == "Добавить пациента") {
-                            usr["id"] = "${Math.random()}"
-                            model.createUser(usr)
-                        } else model.updateUserInList(usr)
-                        model.setState("Выбрать пациента")
-                    }) { Text("Сохранить") }
-                }
-
+                 */
             }
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        myDistrictSpinner(model, rR, irR)
+
+        val usr = model.user.toMutableMap()
+        val fieldstouser: () -> Unit = {
+            usr["F"] = fF.value.text
+            usr["I"] = iI.value.text
+            usr["O"] = oO.value.text
+            usr["D"] = dD.value.text
+            usr["R"] = rR.value.text
+            usr["iR"] = irR.value.text
         }
+        Row {
+            TextButton(onClick = {
+                fieldstouser()
+                model.deleteUser(usr)
+                model.setState("Выбрать пациента")
+            }) { Text("Удалить") }
+
+            Button(onClick = {
+                fieldstouser()
+                if (model.getState() == "Добавить пациента") {
+                    usr["id"] = "${Math.random()}"
+                    model.createUser(usr)
+                } else model.updateUserInList(usr)
+                model.setState("Выбрать пациента")
+            }) { Text("Сохранить") }
+        }
+
     }
 }
 
 @Composable
 fun patItems(model: MainViewModel) {
     val user = model.user
-    val st = MaterialTheme.typography.h6
-    val st2 = MaterialTheme.typography.body2
+    val st = MaterialTheme.typography.body2
+    val st2 = MaterialTheme.typography.h6
     if (model.getState() != "Выбрать пациента" && model.getState() != "Выбрать клинику" && model.getState() != "Добавить пациента" && model.getState() != "Информация") {
         if (user["idPatSuccess"] == "true") {
-            Row(modifier = mpadd) {
-                Column(mf062.clickable(onClick = { }).then(mpadd)) {
+            //Row(modifier = mpadd) {
+                Column(Modifier.clickable(onClick = { })) {
                     Text("${user["F"]} ${user["I"]} ${user["O"]} ${user["D"]}", style = st)
                     //Text("№: " + trimNull(user["idPat"]), style = st)
                 }
-                Column(mpadd) {
+                Column() {
                     when (model.getState()) {
                         "Изменить пациента" -> {
                         }
@@ -155,7 +153,7 @@ fun patItems(model: MainViewModel) {
                         }
                     }
                 }
-            }
+            //}
         } else {
             if (model.getState() != "Изменить пациента" && model.getState() != "Выбрать пациента" && model.getState() != "Выбрать клинику" && model.getState() != "Добавить пациента" && model.getState() != "Информация") {
                 Text("${user["F"]} ${user["I"]} ${user["O"]} ${user["D"]}", style = st)
@@ -175,24 +173,30 @@ fun usrItems(map: Map<String, String>, model: MainViewModel) {
         model.readLpuList(it)
     }
 
-    Row(modifier = mbord.then(mpadd).then(mfw)) {
-        Column(mf062.clickable(onClick = { onclck(map) }).then(mpadd)) {
+    Row(modifier = mbord
+        .then(mpadd)
+        .then(mfw)) {
+        Column(
+            mf062
+                .clickable(onClick = { onclck(map) })
+                .then(mpadd)) {
             Text("${map["F"]} ${map["I"]} ${map["O"]} \n${map["D"]} ", style = typography.body1)
-            Text("${map["R"]}", style = typography.body2)
+            //Text("${map["R"]}", style = typography.body2)
         }
         Column(mpadd) {
-            //Text("${map["R"]}", style = typography.body2)
+            Text("${map["R"]} р-н", style = typography.body2)
             IconButton(onClick = { model.user = map; model.setState("Изменить пациента") }) {
-                Icon(Icons.Default.Edit, "Edit",tint=Color.LightGray)
+                Icon(Icons.Default.Edit, "Edit", tint = Color.LightGray)
             }
         }
     }
     Spacer(modifier = Modifier.height(8.dp))
 }
 
+/*
 @Composable
 fun distItems(map: Map<String, String>, wait: Boolean) {
-    Row(modifier = mpadd.then(mfw)) {
+    Row(modifier = mbord.then(mpadd).then(mfw)) {
         Column(Modifier.fillMaxWidth(0.62f)) {
             map.forEach {
                 Text("$it")
@@ -203,6 +207,7 @@ fun distItems(map: Map<String, String>, wait: Boolean) {
         }
     }
 }
+*/
 
 @Composable
 fun lpuItems(map: Map<String, String>, model: MainViewModel) {
@@ -218,11 +223,20 @@ fun lpuItems(map: Map<String, String>, model: MainViewModel) {
         model.user = usr
         model.setState("Выбрать специальность")
     }
-    Row(modifier = mbord.then(mpadd).then(mfw)) {
-        Column(Modifier.clickable(onClick = { onclck(map) }).then(mf062).then(mpadd)) {
+    Row(modifier = mbord
+        .then(mpadd)
+        .then(mfw)) {
+        Column(
+            Modifier
+                .clickable(onClick = { onclck(map) })
+                .then(mf062)
+                .then(mpadd)) {
             Text(text = "${map["LPUFullName"]}", style = typography.body1)
         }
-        Column(Modifier.clickable(onClick = { onclck(map) }).then(mpadd)) {
+        Column(
+            Modifier
+                .clickable(onClick = { onclck(map) })
+                .then(mpadd)) {
             Text(text = "${map["LPUShortName"]}", style = typography.body2)
         }
     }
@@ -241,13 +255,22 @@ fun cardItems(map: Map<String, String>, model: MainViewModel) {
         //model.readHistList(usr)
         model.setState("Выбрать специальность")
     }
-    Row(modifier = mbord.then(mpadd).then(mfw)) {
-        Column(Modifier.clickable(onClick = { onclck(map) }).then(mf062).then(mpadd)) {
+    Row(modifier = mbord
+        .then(mpadd)
+        .then(mfw)) {
+        Column(
+            Modifier
+                .clickable(onClick = { onclck(map) })
+                .then(mf062)
+                .then(mpadd)) {
             //Text(text="${map["LPUFullName"]}", style = typography.body1)
             if (map["Success"] == "true") Text(text = "Карточка №:", style = typography.body1)
             Text(text = trimNull(map["IdPat"]), style = typography.body1)
         }
-        Column(Modifier.clickable(onClick = { onclck(map) }).then(mpadd)) {
+        Column(
+            Modifier
+                .clickable(onClick = { onclck(map) })
+                .then(mpadd)) {
             Text(text = "${map["LPUShortName"]}", style = typography.body2)
             Spacer(modifier = Modifier.height(16.dp))
             //Text(text="${map["IdLPU"]}", style = typography.overline)
@@ -270,8 +293,13 @@ fun specItems(map: Map<String, String>, model: MainViewModel) {
     if ("${map["Success"]}" == "true") {
         //
     } else {
-        Row(modifier = mbord.then(mpadd).then(mfw)) {
-            Column(mf062.clickable(onClick = { onclck(map) }).then(mpadd)) {
+        Row(modifier = mbord
+            .then(mpadd)
+            .then(mfw)) {
+            Column(
+                mf062
+                    .clickable(onClick = { onclck(map) })
+                    .then(mpadd)) {
                 Text("${map["NameSpesiality"]}", style = typography.body1)
             }
             Column(mpadd) {
@@ -296,8 +324,13 @@ fun docItems(map: Map<String, String>, model: MainViewModel) {
     if ("${map["Success"]}" == "true") {
         //
     } else {
-        Row(modifier = mbord.then(mpadd).then(mfw)) {
-            Column(mf062.clickable(onClick = { onclck(map) }).then(mpadd)) {
+        Row(modifier = mbord
+            .then(mpadd)
+            .then(mfw)) {
+            Column(
+                mf062
+                    .clickable(onClick = { onclck(map) })
+                    .then(mpadd)) {
                 //doc.forEach() { Text("${it.key} ${it.value}") }
                 Text(trimNull(map["Name"]), style = typography.body1)
                 Text(trimNull(map["AriaNumber"]), style = typography.body2)
@@ -325,8 +358,13 @@ fun histItems(map: Map<String, String>, model: MainViewModel) {
 
     val bcolr = Modifier.border(3.dp, MaterialTheme.colors.secondary, shapes.medium)
     if (!map["IdAppointment"].isNullOrEmpty()) {
-        Row(modifier = bcolr.then(mpadd).then(mfw)) {
-            Column(mf062.clickable(onClick = { onclck(map) }).then(mpadd)) {
+        Row(modifier = bcolr
+            .then(mpadd)
+            .then(mfw)) {
+            Column(
+                mf062
+                    .clickable(onClick = { onclck(map) })
+                    .then(mpadd)) {
                 Text(trimNull(map["NameSpesiality"]))
                 //Text(trimNull(map["Name"]))
             }
@@ -356,7 +394,10 @@ fun talonItems(map: Map<String, String>, model: MainViewModel) {
     val bcolr = Modifier.border(3.dp, MaterialTheme.colors.secondary, shapes.medium)
     if (!map["IdAppointment"].isNullOrEmpty()) {
         Row(modifier = bcolr.then(mpadd)) {
-            Column(mf062.clickable(onClick = { onclck(map) }).then(mpadd)) {
+            Column(
+                mf062
+                    .clickable(onClick = { onclck(map) })
+                    .then(mpadd)) {
                 Text(trimNull(usr["NameSpesiality"]))
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(trimNull(usr["DocName"]), style = typography.body2)
@@ -388,7 +429,9 @@ fun talonItemsEdit(model: MainViewModel) {
     }
     val bcolr = Modifier.border(3.dp, MaterialTheme.colors.secondary, shapes.medium)
 
-    Row(modifier = bcolr.then(mpadd).then(mfw)) {
+    Row(modifier = bcolr
+        .then(mpadd)
+        .then(mfw)) {
         Column(mf062.then(mpadd)) {
             //Text(trimNull("№ " + usr["IdAppointment"]))
             Text(trimNull(usr["NameSpesiality"]))
