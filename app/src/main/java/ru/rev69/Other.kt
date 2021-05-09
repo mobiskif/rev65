@@ -7,6 +7,15 @@ import android.net.Uri
 import android.provider.CalendarContract
 import android.util.Log
 import android.widget.DatePicker
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
@@ -16,6 +25,51 @@ val c = Calendar.getInstance()
 val year = c.get(Calendar.YEAR)
 val month = c.get(Calendar.MONTH)
 val day = c.get(Calendar.DAY_OF_MONTH)
+
+@Composable
+fun myTopBar(model: MainViewModel) {
+    val mod = Modifier
+        .background(MaterialTheme.colors.primary)
+        .padding(16.dp)
+        .fillMaxWidth()
+    val stl = MaterialTheme.typography.h6
+    Text(modifier = mod, text = model.getState(), style = stl, color = MaterialTheme.colors.contentColorFor(MaterialTheme.colors.primary))
+}
+
+@Composable
+fun myColumn(
+    col: Modifier = mWhite.then(Modifier.clickable(onClick = { })),
+    children: @Composable () -> Unit
+) {
+    Spacer(modifier = Modifier.height(8.dp))
+    Column(
+        modifier = (col
+            .then(mbord)
+            .then(mpadd)).then(Modifier.fillMaxWidth())
+    ) {
+        children()
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+}
+
+@Composable
+fun myTopDropDownMenu(model: MainViewModel) {
+    val expanded = remember { mutableStateOf(false) }
+    Row {
+        DropdownMenu(
+            expanded = expanded.value,
+            onDismissRequest = { expanded.value = false }
+        ) {
+            DropdownMenuItem(onClick = {
+                model.isAdmin = true
+            }) {
+                Text("SearchTop10")
+            }
+            //Divider()
+        }
+    }
+}
+
 /*
 val datePickerDialog = DatePickerDialog(
     this, DatePickerDialog.OnDateSetListener

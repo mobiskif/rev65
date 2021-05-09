@@ -17,101 +17,62 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
-val mbord = Modifier.border(0.dp, Color.LightGray, Shapes().medium)
+val mbord = Modifier.border(1.dp, Color.LightGray, Shapes().medium)
 val mpadd = Modifier.padding(8.dp)
 val mWhite = Modifier.background(Color.White, shape = Shapes().medium)
 val mfw = Modifier.fillMaxWidth()
 val mf062 = Modifier.fillMaxWidth(0.62f)
 
-@Composable
-fun myTopBar(model: MainViewModel) {
-    val mod = Modifier
-        .background(MaterialTheme.colors.primary)
-        .padding(16.dp)
-        .fillMaxWidth()
-    val stl = MaterialTheme.typography.h6
-    Text(modifier = mod, text = model.getState(), style = stl, color = MaterialTheme.colors.contentColorFor(MaterialTheme.colors.primary))
-}
 
+@Composable
+fun myMenu(model: MainViewModel) {
+    val expanded = remember { mutableStateOf(false) }
+    IconButton(
+        onClick = { expanded.value = true },
+        content = { Icon(Icons.Default.MoreVert, "Menu") }
+    )
+    DropdownMenu(
+        expanded = expanded.value,
+        onDismissRequest = { expanded.value = false }
+    ) {
+        DropdownMenuItem(
+            onClick = { model.setState("Выбрать пациента"); expanded.value = false },
+            content = { Text("Выбрать пациента") }
+        )
+        DropdownMenuItem(
+            onClick = { model.setState("Мои карточки"); expanded.value = false  },
+            content = { Text("Мои карточки") }
+        )
+        DropdownMenuItem(
+            onClick = { model.setState("Отложенные талоны"); expanded.value = false  },
+            content = { Text("Отложенные талоны") }
+        )
+        DropdownMenuItem(
+            onClick = { model.setState("Информация"); expanded.value = false  },
+            content = { Text("Информация") }
+        )
+        //Divider()
+    }
+}
 @Composable
 fun myBar(model: MainViewModel) {
     TopAppBar(
         title = { Text(model.getState(), maxLines = 1) },
-
         navigationIcon = {
             IconButton(onClick = { model.setState("Выбрать пациента") }) {
                 Icon(Icons.Filled.Menu, "")
             }
         },
-/*
-        actions = {
-            IconButton(onClick = { model.setState("Информация")  }) {
-                Icon(Icons.Filled.Warning,"")
-            }
-        },
-*/
-        actions = {
-            val expanded = remember { mutableStateOf(false) }
-            IconButton(onClick = { expanded.value = true }) {
-                Icon(Icons.Default.MoreVert, "Menu")
-            }
-            DropdownMenu(
-                expanded = expanded.value,
-                onDismissRequest = { expanded.value = false }
-            ) {
-                DropdownMenuItem(
-                    onClick = { model.setState("Выбрать пациента") },
-                    content = { Text("SearchTop10") }
-                )
-                DropdownMenuItem(
-                    onClick = { model.isAdmin = true },
-                    content = { Text("Домой") }
-                )
-                //Divider()
-            }
-        }
+        actions = { myMenu(model) }
     )
 }
 
-@Composable
-fun myColumn(
-    col: Modifier = mWhite.then(Modifier.clickable(onClick = { })),
-    children: @Composable () -> Unit
-) {
-    Spacer(modifier = Modifier.height(8.dp))
-    Column(
-        modifier = (col
-            .then(mbord)
-            .then(mpadd)).then(Modifier.fillMaxWidth())
-    ) {
-        children()
-    }
-    Spacer(modifier = Modifier.height(8.dp))
-}
 
 @Composable
 fun myFab(model: MainViewModel) {
     if (model.getState() == "Выбрать пациента") {
         FloatingActionButton(onClick = { model.setState("Добавить пациента") }) {
             Icon(Icons.Filled.Add, "Add")
-        }
-    }
-}
-
-@Composable
-fun myTopDropDownMenu(model: MainViewModel) {
-    val expanded = remember { mutableStateOf(false) }
-    Row {
-        DropdownMenu(
-            expanded = expanded.value,
-            onDismissRequest = { expanded.value = false }
-        ) {
-            DropdownMenuItem(onClick = {
-                model.isAdmin = true
-            }) {
-                Text("SearchTop10")
-            }
-            //Divider()
         }
     }
 }
